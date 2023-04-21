@@ -6,11 +6,9 @@ import { useState,useEffect } from 'react';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-    <Header />
-    <Component {...pageProps} />
-
-
-  </> )
+      <Header />
+      <Component {...pageProps} />
+    </> )
 }
 
 // useEffect (() => { 

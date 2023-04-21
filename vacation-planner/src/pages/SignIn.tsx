@@ -7,12 +7,13 @@ import {db} from "../../firebaseConfig"
 export const SignIn = () => {
 
     const [email,setEmail] = useState("");
-    const [Password,setPassword] = useState("");
+    const [password,setPassword] = useState("");
     async function handleSignIn() {
-        createUserWithEmailAndPassword(auth, email, Password)
+        signInWithEmailAndPassword(auth, email, password)
         .catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
+            console.log(errorMessage)
         })
     }
 
@@ -20,13 +21,13 @@ export const SignIn = () => {
         <div>
             <h1>Sign In</h1>
             <label>
-            Email:
-                <input value={email} onChange={e => setEmail(e.target.value)} type="email" />
+                Email:
             </label>
+                <input value={email} onChange={e => setEmail(e.target.value)} type="email" />
             <label>
                 Password:
-                <input value={Password} onChange={e => setPassword(e.target.value)} type="password" />
             </label>
+                <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
             <button onClick={handleSignIn}>Sign In</button>
         </div>
     )

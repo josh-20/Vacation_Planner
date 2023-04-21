@@ -13,6 +13,7 @@ export const SignUp = () => {
         .catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
+            console.log(errorMessage)
         })
     }
 
@@ -21,13 +22,13 @@ export const SignUp = () => {
             <h1>Sign Up</h1>
             <label>
                 Email:
-                <input value={email} onChange={e => setEmail(e.target.value)} type="email" />
             </label>
+                <input value={email} onChange={e => setEmail(e.target.value)} type="email" />
             <label>
                 Password:
-                <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
             </label>
-            <button onClick={handleSignIn}>Sign In</button>
+                <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
+            <button onClick={handleSignIn}>Sign Up</button>
         </div>
     )
 }
