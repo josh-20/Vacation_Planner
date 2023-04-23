@@ -8,9 +8,11 @@ import "./Planner"
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
   return (
     <>
      <Link href="/Planner">Planner</Link>
     </>
+    
   )
 }
