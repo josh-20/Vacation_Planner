@@ -7,6 +7,7 @@ import '/public/travelPic.png'
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+<<<<<<< HEAD
     
     <Header />
     
@@ -15,6 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
   </> )
+=======
+      <Header />
+      <Component {...pageProps} />
+    </> )
+>>>>>>> a8cea07e30b14d6d50b31291efdc381f906358b1
 }
 
 // useEffect (() => { 

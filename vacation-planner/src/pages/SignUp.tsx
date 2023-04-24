@@ -4,12 +4,12 @@ import {auth} from "../../firebaseConfig"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import {db} from "../../firebaseConfig"
 
-export const SignIn = () => {
+export const SignUp = () => {
 
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     async function handleSignIn() {
-        signInWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, email, password)
         .catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
@@ -19,7 +19,7 @@ export const SignIn = () => {
 
     return(
         <div>
-            <h1>Sign In</h1>
+            <h1>Sign Up</h1>
             <label>
                 Email:
             </label>
@@ -28,7 +28,7 @@ export const SignIn = () => {
                 Password:
             </label>
                 <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
-            <button onClick={handleSignIn}>Sign In</button>
+            <button onClick={handleSignIn}>Sign Up</button>
         </div>
     )
 }
