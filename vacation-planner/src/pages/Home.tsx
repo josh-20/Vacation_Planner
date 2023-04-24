@@ -13,7 +13,6 @@ export default function Home() {
 
     useEffect(() => {
         const checkAuth = onAuthStateChanged(auth, (user) =>{
-            setLoading(false);
             console.log(user);
             if(user === null){
                router.push("/SignIn")

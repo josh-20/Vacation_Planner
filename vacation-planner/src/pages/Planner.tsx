@@ -14,7 +14,8 @@ type Message = {
   authorEmail: string,
   content: string,
 }
-type Room = {
+// planner adapt
+type Planner = {
   id: string,
   creatorId: string,
   code: string,
@@ -26,16 +27,11 @@ export default function Planner() {
     const [longitude,setLongitude] = useState(0);
     const[latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
-    const [room, setRoom] = useState<Room>();
+    const [room, setRoom] = useState<Planner>();
     const [message, setMessage] = useState('');
-    const [newRoomName, setNewRoomName] = useState('');
+    const [newPlannerName, setNewRoomName] = useState('');
     const [newCode, setNewCode] = useState('');
 
-
-
-    function joinRoom(room: Room){
-
-    }
 
     useEffect (() => { 
           const watch = navigator.geolocation.watchPosition((location) => {
@@ -50,19 +46,19 @@ export default function Planner() {
       },[])
 
     useEffect (() => {
-      
-      async function createChat() {
-        if(!newCode || !newRoomName){
+      async function loadChat() {
+        if(!newCode || !newPlannerName){
           return;
         }
-        const room = {
-          name: newRoomName,
+        const planner = {
+          name: newPlannerName,
           code: newCode,
           creatorId: auth.currentUser!.uid,
         }
-        const docRef = await addDoc(collection(db, "planner"), room);
-        (room as Room).id = docRef.id;
-        setRoom(room as Room);
+        // adding doc of planner. still need to 
+        const docRef = await addDoc(collection(db, "planner"), planner);
+        (planner as Planner).id = docRef.id;
+        setRoom(planner as Planner);
       }
 
     },[]);

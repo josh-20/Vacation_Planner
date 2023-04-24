@@ -12,13 +12,14 @@ export default function SignIn(){
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     async function handleSignIn() {
-        signInWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(auth, email, password).then(() =>{
+            router.push('/Home');
+        })
         .catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
             console.log(errorMessage)
         })
-        return router.push('/Home');
     }
 
     return(
