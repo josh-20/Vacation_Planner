@@ -14,8 +14,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <div className='picture-ctn text-center'>
+        <Image className="picture"src="/travelPic.png"
+          alt="Main Picture"
+          width={1000}
+          height={500}
+        />
+      </div>
       <div>
+        <h1 className={styles.content}>TravelR</h1>
+        <h1 className={styles.content}>TravelR</h1>
+        <h1 className={styles.content}>TravelR</h1>
         <h1 className={styles.content}>TravelR</h1>
       </div>
     </>
