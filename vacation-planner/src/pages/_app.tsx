@@ -1,26 +1,17 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import Header from './header'
+import Footer from './footer'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState,useEffect } from 'react';
-import '/public/travelPic.png'
 export default function App({ Component, pageProps }: AppProps) {
+  const showHeader = !(typeof window !== "undefined" && (window.location.pathname === "/signin" || window.location.pathname === "/signup"));
   return (
     <>
-<<<<<<< HEAD
-    
-    <Header />
-    
+    {showHeader && <Header />}
     <Component {...pageProps} />
-    
-
-
-  </> )
-=======
-      <Header />
-      <Component {...pageProps} />
+    {showHeader && <Footer />}
     </> )
->>>>>>> a8cea07e30b14d6d50b31291efdc381f906358b1
 }
 
 // useEffect (() => { 
