@@ -203,5 +203,12 @@
 }
 .content{
   margin-top: 200px;
-  margin-bottom: 10000px;
+}
+.picture{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

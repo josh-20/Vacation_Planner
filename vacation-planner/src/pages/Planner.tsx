@@ -1,4 +1,4 @@
-export const Planner = () => {
+export default function Planner() {
     return (
         <div>
             Planner Page!
