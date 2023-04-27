@@ -22,16 +22,17 @@ export default function Header() {
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#contact">Contact</a></li>
           </ul>
         </nav>
-        <nav className="header-sidebar not-visible">
+        <nav className={`header-sidebar ${isSidebarVisible ? 'visible' : 'not-visible'}`}>
           <a className= "cl-hamburger hamburger" id="close-sidebar" onClick={toggleSidebar}>☰</a>
           <ul className="nav-ctn">
-            <li className="nav-item"><a href="./Home"className="nav-item">Home</a></li>
-            <li className="nav-item"><a href="./Planner"className="nav-item">Planner</a></li>
-            <li className="nav-item"><a className="nav-item">Services</a></li>
-            <li className="nav-item"><a className="nav-item">Contact</a></li>
+            <li className="side-item"><a href="./Home"className="nav-item">Home</a></li>
+            <li className="side-item"><a href="./Planner"className="nav-item">Planner</a></li>
+            <li className="side-item"><a className="nav-item">Services</a></li>
+            <li className="side-item"><a className="nav-item">Contact</a></li>
+            <li className="side-item"><a className="nav-item"></a></li>
           </ul>
         </nav>
-        <div className="cl-fader fader opaque hidden"></div>
+        <div className={`fader ${isSidebarVisible ? 'opaque' : 'hidden'}`} onClick={toggleSidebar}></div>
     </header>
     </>
   )
