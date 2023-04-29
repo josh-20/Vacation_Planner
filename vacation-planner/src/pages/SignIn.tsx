@@ -3,16 +3,17 @@ import {app} from "../../firebaseConfig"
 import {auth} from "../../firebaseConfig"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import {db} from "../../firebaseConfig"
-import { useRouter } from "next/router"
+import "./Home"
+import { useRouter } from "next/router";
 
-export const SignIn = () => {
+
+export default function SignIn(){
     const router = useRouter();
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     async function handleSignIn() {
-        signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            router.push("/");
+        signInWithEmailAndPassword(auth, email, password).then(() =>{
+            router.push('/Home');
         })
         .catch((error) => {
             const errorCode = error.code
