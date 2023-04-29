@@ -71,7 +71,6 @@ export default function Home() {
     function handleViewPlan(plannerId: string){
         
         router.push({pathname: "/Planner", query: {id: plannerId}});
-        
     }
 
     useEffect(() => {
@@ -96,7 +95,7 @@ export default function Home() {
                 <input onChange={e=>setNewPlannerName(e.target.value)}/>
             </label>
             <label>
-                Enter Join Code:
+                Join Code:
                 <input onChange={e=>setCode(e.target.value)}/>
             </label>
             <button value="id" onClick={()=> {handleCreatePlan()}}>Create Plan</button>

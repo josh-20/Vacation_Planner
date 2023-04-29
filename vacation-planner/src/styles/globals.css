@@ -96,6 +96,7 @@ a {
   color: #f3f9f3;
   text-decoration: none;
   font-size: 1.25rem;
+  cursor: pointer;
 }
 
 .nav-ctn{

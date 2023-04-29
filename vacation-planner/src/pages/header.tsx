@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Header() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const router = useRouter();
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
+  }
+  function handleHome() {
+    router.push("/Home");
   }
   return (
     <>
@@ -16,7 +21,7 @@ export default function Header() {
             <a className="cl-hamburger hamburger" id="open-sidebar" onClick={toggleSidebar}>☰</a>
           </div>
           <ul className="row nav-ctn">
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./Home">Home</a></li>
+            <li className="col-sm-3 text-center nav-item" onClick={handleHome}>Home</li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./Planner">Planner</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#contact">Contact</a></li>
