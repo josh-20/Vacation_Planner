@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
@@ -15,15 +14,16 @@ type Message = {
   authorEmail: string,
   content: string,
 }
-
+const key = "edab3a16d1fc4f7fa2e32357232904";
 export default function Planner() {
-  const auth = getAuth();
-    const [longitude,setLongitude] = useState(0);
-    const[latitude,setLatitude] = useState(0);
+    const auth = getAuth();
+    const [lon,setLongitude] = useState(0);
+    const [lat,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
     const [message, setMessage] = useState('');
     const [newPlannerName, setNewRoomName] = useState('');
     const [newCode, setNewCode] = useState('');
+    const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${lat},${lon}&days=3`;
 
 
     useEffect (() => { 
@@ -35,6 +35,7 @@ export default function Planner() {
           }, {
             enableHighAccuracy: true,
           });
+          getForecast();
           return() => navigator.geolocation.clearWatch(watch);
       },[])
     async function loadChat() {
@@ -45,14 +46,23 @@ export default function Planner() {
         )
       )
     }
-=======
-export default function Planner() {
->>>>>>> 57d8f0ea63ec518c56b422a6234e294e45950c31
+    async function getForecast() {
+        const response = fetch(forecastWeatherUrl, {
+            method: 'GET',
+            cache: "no-cache",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const data = await (await response).json();
+        console.log(data)
+    }
+    
     return (
         <div>
             <div>
-                Long: {longitude}
-                Lat: {latitude}
+                Lat: {lat}
+                Lon: {lon}
             </div>
             Planner Page!
         </div>
