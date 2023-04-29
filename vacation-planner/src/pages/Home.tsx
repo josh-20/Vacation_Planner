@@ -1,7 +1,7 @@
 import { useState ,useEffect } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { addDoc,collection } from "firebase/firestore";
+import { addDoc,collection, getDocs, query, where } from "firebase/firestore";
 import { db,rtdb } from "../../firebaseConfig";
 import "./SignIn";
 import "./Home";
@@ -23,6 +23,24 @@ export default function Home() {
     const [newPlannerName, setNewPlannerName] = useState('');
     const[planners, setPlanners] = useState<Planner[]>([])
 
+
+    useEffect(() => {
+        async function loadPlans() {
+
+            try {
+                const querySnapshot = await getDocs(query(collection(db,"planners"), where("creatorId", "==", auth.currentUser!.uid)));
+                console.log(querySnapshot);
+            } catch (error) {
+                console.error(error);
+            }
+            // const myplans: Planner[] = [];
+            // querySnapshot.forEach((doc) => {
+            //     myplans.push({...doc.data(), id: doc.id} as Planner);
+            // });
+            // setPlanners(myplans);
+        };
+    },[])
+    console.log(planners);
     async function handleCreatePlan() {
         if(!newCode || !newPlannerName){
             return;
@@ -33,7 +51,7 @@ export default function Home() {
             creatorId: auth.currentUser!.uid,
           }
            // adding doc for planner. Still need to add A chat room for each planner.
-        const docRef = await addDoc(collection(db, "planner"), planner);
+        const docRef = await addDoc(collection(db, "planners"), planner);
         (planner as Planner).id = docRef.id;
         setPlanners([...planners, planner as Planner]);
     }
@@ -56,6 +74,14 @@ export default function Home() {
             <button onClick={() => {signOut(auth)}}>signOut</button>
             <input onChange={e=>setNewPlannerName(e.target.value)}/>
             <button value="id" onClick={handleCreatePlan}>Create Plan</button>
+
+            {
+                planners.map((planner) =>(
+                    <div key={planner.id}>
+                        <div>{planner.name}</div>
+                    </div>
+                ))
+            }
 
         </div>
     )
