@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState ,useEffect } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -83,6 +84,26 @@ export default function Home() {
                 ))
             }
 
+=======
+export default function Home() {
+    return(
+        <div>
+            Home Page!
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            <div>Hello</div>
+            
+>>>>>>> 57d8f0ea63ec518c56b422a6234e294e45950c31
         </div>
+        
     )
 }

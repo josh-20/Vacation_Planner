@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
@@ -44,6 +45,9 @@ export default function Planner() {
         )
       )
     }
+=======
+export default function Planner() {
+>>>>>>> 57d8f0ea63ec518c56b422a6234e294e45950c31
     return (
         <div>
             <div>
