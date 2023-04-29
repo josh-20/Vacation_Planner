@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-import { useState ,useEffect } from "react";
+import { useState ,useEffect, useContext } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { addDoc,collection, getDocs, query, where } from "firebase/firestore";
@@ -24,24 +23,24 @@ export default function Home() {
     const [newPlannerName, setNewPlannerName] = useState('');
     const[planners, setPlanners] = useState<Planner[]>([])
 
-
+    const plannerCollectionRef = collection(db, "planners");
     useEffect(() => {
         async function loadPlans() {
-
             try {
-                const querySnapshot = await getDocs(query(collection(db,"planners"), where("creatorId", "==", auth.currentUser!.uid)));
-                console.log(querySnapshot);
+                const data = await getDocs(query(collection(db, "planners")))
+                const myplans: Planner[] = [];
+                data.forEach((doc) => {
+                    myplans.push({...doc.data(), id: doc.id} as Planner);
+                });
+                setPlanners(myplans);
             } catch (error) {
                 console.error(error);
             }
-            // const myplans: Planner[] = [];
-            // querySnapshot.forEach((doc) => {
-            //     myplans.push({...doc.data(), id: doc.id} as Planner);
-            // });
-            // setPlanners(myplans);
         };
+        loadPlans();
     },[])
-    console.log(planners);
+
+    // Create the base plan
     async function handleCreatePlan() {
         if(!newCode || !newPlannerName){
             return;
@@ -56,10 +55,17 @@ export default function Home() {
         (planner as Planner).id = docRef.id;
         setPlanners([...planners, planner as Planner]);
     }
+    // view planner selected.
+    function handleViewPlan(plannerId: string){
+        
+        router.push({pathname: "/Planner", query: {id: plannerId}});
+        
+    }
 
     useEffect(() => {
         const checkAuth = onAuthStateChanged(auth, (user) =>{
             console.log(user);
+            setUser(user);
             if(user === null){
                router.push("/SignIn")
             }
@@ -75,34 +81,17 @@ export default function Home() {
             <button onClick={() => {signOut(auth)}}>signOut</button>
             <input onChange={e=>setNewPlannerName(e.target.value)}/>
             <button value="id" onClick={handleCreatePlan}>Create Plan</button>
+            <div>
+                {
+                    planners.map((planner) =>(
+                        <div key={planner.id}>
+                            <div>{planner.name}</div>
+                            <button onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                        </div>
+                    ))
+                }
+            </div>
 
-            {
-                planners.map((planner) =>(
-                    <div key={planner.id}>
-                        <div>{planner.name}</div>
-                    </div>
-                ))
-            }
-
-=======
-export default function Home() {
-    return(
-        <div>
-            Home Page!
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            <div>Hello</div>
-            
->>>>>>> 57d8f0ea63ec518c56b422a6234e294e45950c31
         </div>
         
     )

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
@@ -6,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { query, collection, addDoc, getDocs, where } from "firebase/firestore";
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
+import { useRouter } from "next/router";
 
 
 
@@ -17,7 +17,10 @@ type Message = {
 }
 
 export default function Planner() {
-  const auth = getAuth();
+
+    const auth = getAuth();
+    const router = useRouter();
+    const {keyword} = router.query;
     const [longitude,setLongitude] = useState(0);
     const[latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
@@ -27,6 +30,7 @@ export default function Planner() {
 
 
     useEffect (() => { 
+          console.log(keyword)
           const watch = navigator.geolocation.watchPosition((location) => {
             setLongitude(location.coords.longitude);
             setLatitude(location.coords.latitude);
@@ -36,6 +40,7 @@ export default function Planner() {
             enableHighAccuracy: true,
           });
           return() => navigator.geolocation.clearWatch(watch);
+
       },[])
     async function loadChat() {
       const querySnapshot = await getDocs(
@@ -45,9 +50,6 @@ export default function Planner() {
         )
       )
     }
-=======
-export default function Planner() {
->>>>>>> 57d8f0ea63ec518c56b422a6234e294e45950c31
     return (
         <div>
             <div>
