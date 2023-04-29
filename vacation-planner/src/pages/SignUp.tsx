@@ -3,9 +3,11 @@ import {app} from "../../firebaseConfig"
 import {auth} from "../../firebaseConfig"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import {db} from "../../firebaseConfig"
+import { useRouter } from "next/router"
+import "./SignIn"
 
-export const SignUp = () => {
-
+export default function SignUp(){
+    const router = useRouter();
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     async function handleSignIn() {
@@ -15,6 +17,7 @@ export const SignUp = () => {
             const errorMessage = error.message
             console.log(errorMessage)
         })
+        router.push("/SignIn");
     }
 
     return(

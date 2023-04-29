@@ -13,17 +13,3 @@ export default function App({ Component, pageProps }: AppProps) {
     {showComponent && <Footer />}
     </> )
 }
-
-// useEffect (() => { 
-//   if(navigator){
-//     navigator.geolocation.getCurrentPosition((location) => {
-//       console.log(location);
-//     }, (err) => {
-//       console.log(err);
-//     }, {
-//       enableHighAccuracy: true,
-//     });
-//   }else{
-
-//   }
-// },[])
