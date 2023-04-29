@@ -1,7 +1,7 @@
 import { useState ,useEffect, useContext } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { addDoc,collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc,collection, getDocs, query, where, doc, serverTimestamp } from "firebase/firestore";
 import { db,rtdb } from "../../firebaseConfig";
 import "./SignIn";
 import "./Home";
@@ -27,7 +27,7 @@ export default function Home() {
     useEffect(() => {
         async function loadPlans() {
             try {
-                const data = await getDocs(query(collection(db, "planners")))
+                const data = await getDocs(query(collection(db, "planners"), where("creatorId", "==", auth.currentUser?.uid)));
                 const myplans: Planner[] = [];
                 data.forEach((doc) => {
                     myplans.push({...doc.data(), id: doc.id} as Planner);
@@ -43,9 +43,11 @@ export default function Home() {
     // Create the base plan
     async function handleCreatePlan() {
         if(!newCode || !newPlannerName){
+            console.log("hello im not supposed to be here")
             return;
           }
           const planner = {
+            id: "",
             name: newPlannerName,
             code: newCode,
             creatorId: auth.currentUser!.uid,
@@ -53,6 +55,16 @@ export default function Home() {
            // adding doc for planner. Still need to add A chat room for each planner.
         const docRef = await addDoc(collection(db, "planners"), planner);
         (planner as Planner).id = docRef.id;
+
+        //add chat to current doc
+        const chatRef = collection(db, "planners",planner.id, "chat");
+        const chatRoom = {
+            name: "",
+            createdBy: auth.currentUser?.displayName,
+            createdAt: serverTimestamp(),
+        }
+        await addDoc(chatRef, chatRoom)
+        console.log(docRef);
         setPlanners([...planners, planner as Planner]);
     }
     // view planner selected.
@@ -79,8 +91,15 @@ export default function Home() {
         <div>
             Home Page!
             <button onClick={() => {signOut(auth)}}>signOut</button>
-            <input onChange={e=>setNewPlannerName(e.target.value)}/>
-            <button value="id" onClick={handleCreatePlan}>Create Plan</button>
+            <label>
+                Name:
+                <input onChange={e=>setNewPlannerName(e.target.value)}/>
+            </label>
+            <label>
+                Enter Join Code:
+                <input onChange={e=>setCode(e.target.value)}/>
+            </label>
+            <button value="id" onClick={()=> {handleCreatePlan()}}>Create Plan</button>
             <div>
                 {
                     planners.map((planner) =>(
