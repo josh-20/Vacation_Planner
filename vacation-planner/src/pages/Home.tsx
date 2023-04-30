@@ -57,14 +57,6 @@ export default function Home() {
         (planner as Planner).id = docRef.id;
 
         //add chat to current doc
-        const chatRef = collection(db, "planners",planner.id, "chat");
-        const chatRoom = {
-            name: "",
-            createdBy: auth.currentUser?.displayName,
-            createdAt: serverTimestamp(),
-        }
-        await addDoc(chatRef, chatRoom)
-        console.log(docRef);
         setPlanners([...planners, planner as Planner]);
     }
     // view planner selected.

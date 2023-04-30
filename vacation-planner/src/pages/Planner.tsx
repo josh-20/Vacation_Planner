@@ -2,7 +2,7 @@ import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { query, collection, addDoc, getDocs, where } from "firebase/firestore";
+import { query, collection, addDoc, getDocs, where,doc, serverTimestamp, FieldValue } from "firebase/firestore";
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
@@ -16,21 +16,29 @@ type Message = {
   content: string,
 }
 
-export default function Planner() {
+type Chat = {
+  id: string
+  name: string,
+  createdBy: string,
+  createdAt: FieldValue,
 
+}
+
+
+
+export default function Planner() {
     const auth = getAuth();
     const router = useRouter();
-    const {keyword} = router.query;
+    const id = router.query!.id as string;
     const [longitude,setLongitude] = useState(0);
     const[latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
+    const [chat,setChat] = useState<Chat[]>([]);
     const [message, setMessage] = useState('');
-    const [newPlannerName, setNewRoomName] = useState('');
-    const [newCode, setNewCode] = useState('');
-
+    const [planner, setPlanner] = useState(null);
+    const [chatId, setChatId] = useState('');
 
     useEffect (() => { 
-          console.log(keyword)
           const watch = navigator.geolocation.watchPosition((location) => {
             setLongitude(location.coords.longitude);
             setLatitude(location.coords.latitude);
@@ -39,23 +47,46 @@ export default function Planner() {
           }, {
             enableHighAccuracy: true,
           });
-          return() => navigator.geolocation.clearWatch(watch);
 
+          async function loadchat() {
+            const chats = await getDocs(
+              query(
+                collection(db, `planners/${id}/chat`),
+                where("creatorId", "==", auth.currentUser!.uid)
+              )
+            );
+            const chat: Chat[] = [];
+            chats.forEach((doc) => {
+              chat.push({...doc.data(), id: doc.id} as Chat);
+            });
+            setChat(chat)
+            console.log(chat.length)
+          }
+          loadchat()
+          return() => navigator.geolocation.clearWatch(watch);
       },[])
-    async function loadChat() {
-      const querySnapshot = await getDocs(
-        query(
-          collection(db, "chat"),
-          where("creatorId", "==", auth.currentUser!.uid)
-        )
-      )
-    }
+
+      async function createChat() {
+        if(chat.length < 1){
+          const chatRef = collection(db, `planners/${id}/chat`);
+            const chatRoom = {
+                name: auth.currentUser!.email,
+                createdBy: auth.currentUser!.uid,
+                createdAt: serverTimestamp(),
+            }
+            const docRef = await addDoc(chatRef, chatRoom);
+            (chatRoom as Chat).id = docRef.id;
+            setChatId(docRef.id);
+        }        
+      }
+
     return (
         <div>
             <div>
                 Long: {longitude}
                 Lat: {latitude}
             </div>
+            <button onClick={() => {createChat()}}>Chat</button>
             Planner Page!
         </div>
     )
