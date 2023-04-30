@@ -89,10 +89,13 @@ export default function Home() {
                                 <button className={style.planButton + " col-sm-6 text-center"}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
                             </div>
                         ))
-                    }<div className={style.planName + " " + style.planNameCenter}>Plan Name</div>
+                    }
                     <div className={"text-center " + style.createPlanCtn}>
+                    <div className={style.planName + " " + style.planNameCenter}>Plan Name</div>
                         <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                        <div>
                         <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
+                        </div>
                     </div>
                 </div>
             </div>
