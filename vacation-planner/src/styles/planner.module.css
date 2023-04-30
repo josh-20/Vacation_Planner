@@ -23,14 +23,13 @@
 }
 .planInput{
     max-width: 200px;
-    margin-right: 5px;
+    margin-bottom: 10px;
 }
 .createPlanCtn{
     margin: 10px 0px;
 }
 .planNameCenter{
     text-align: center;
-    margin-right: 100px;
 }
 .planButton:hover{
     background-color: #f3f9f3;
