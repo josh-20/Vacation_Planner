@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function Header() {
+  const auth = getAuth();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -17,18 +19,18 @@ export default function Header() {
           </div>
           <ul className="row nav-ctn">
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./Home">Home</a></li>
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./Planner">Planner</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#contact">Contact</a></li>
+            <li className="col-sm-3 text-center nav-item"onClick={() => {signOut(auth)}}>Sign Out</li>
           </ul>
         </nav>
         <nav className={`header-sidebar ${isSidebarVisible ? 'visible' : 'not-visible'}`}>
           <a className= "cl-hamburger hamburger" id="close-sidebar" onClick={toggleSidebar}>☰</a>
           <ul className="nav-ctn">
             <li className="side-item"><a href="./Home"className="nav-item">Home</a></li>
-            <li className="side-item"><a href="./Planner"className="nav-item">Planner</a></li>
             <li className="side-item"><a className="nav-item">Services</a></li>
             <li className="side-item"><a className="nav-item">Contact</a></li>
+            <li className="side-item nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
             <li className="side-item"><a className="nav-item"></a></li>
           </ul>
         </nav>

@@ -5,6 +5,7 @@ import { addDoc,collection, getDocs, query, where } from "firebase/firestore";
 import { db,rtdb } from "../../firebaseConfig";
 import "./SignIn";
 import "./Home";
+import style from '../styles/planner.module.css';
 
 type Planner = {
     id: string,
@@ -17,11 +18,11 @@ export default function Home() {
     const auth = getAuth();
     const router = useRouter();
     const [loggedIn, setLoggedIn] = useState(false);
-    const  [user, setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true);
     const [newCode, setCode] = useState('');
     const [newPlannerName, setNewPlannerName] = useState('');
-    const[planners, setPlanners] = useState<Planner[]>([])
+    const [planners, setPlanners] = useState<Planner[]>([])
 
     const plannerCollectionRef = collection(db, "planners");
     useEffect(() => {
@@ -77,29 +78,24 @@ export default function Home() {
 
     return(
         <div>
-            Home Page!
-            <button onClick={() => {signOut(auth)}}>signOut</button>
-            <input onChange={e=>setNewPlannerName(e.target.value)}/>
-            <button value="id" onClick={handleCreatePlan}>Create Plan</button>
-            <div>
-                {
-                    planners.map((planner) =>(
-                        <div key={planner.id}>
-                            <div>{planner.name}</div>
-                            <button onClick={() =>{handleViewPlan(planner.id)}}>View</button>
-                        </div>
-                    ))
-                }
-            </div>
-
-            {
-                planners.map((planner) =>(
-                    <div key={planner.id}>
-                        <div>{planner.name}</div>
+            
+            <div className="row">
+                <div className={style.planCtn}>
+                    <h2 className={style.planHeader + " col-sm-6 text-center"}>Plan List</h2>
+                    {
+                        planners.map((planner) =>(
+                            <div className=" col-sm-6 text-center" key={planner.id}>
+                                <div className={style.planName + " col-sm-12 text-center"}>{planner.name}</div>
+                                <button className={style.planButton + " col-sm-6 text-center"}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                            </div>
+                        ))
+                    }<div className={style.planName + " " + style.planNameCenter}>Plan Name</div>
+                    <div className={"text-center " + style.createPlanCtn}>
+                        <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                        <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
                     </div>
-                ))
-            }
-
+                </div>
+            </div>
         </div> 
     )
 }

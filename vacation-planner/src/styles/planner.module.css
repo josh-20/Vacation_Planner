@@ -1,0 +1,52 @@
+.planName{
+    font-size: 20px;
+    color: #56514b;
+    font-weight: 500;
+    margin: 0px 0px 5px 0px;
+}
+.planHeader{
+    margin: 10px 0px 20px 0px;
+    color: #56514b;
+    text-decoration: underline;
+    text-shadow: #56514b 0px 1px 2px;
+    cursor: default;
+}
+.planButton{
+    text-align: center;
+    background-color: #56514b;
+    max-width: 100px;
+    color: #f3f9f3;
+    border: #56514b 2px solid;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.planInput{
+    max-width: 200px;
+    margin-right: 5px;
+}
+.createPlanCtn{
+    margin: 10px 0px;
+}
+.planNameCenter{
+    text-align: center;
+    margin-right: 100px;
+}
+.planButton:hover{
+    background-color: #f3f9f3;
+    color: #56514b;
+    box-shadow: #56514b 0px 2px 5px;
+    transform: translateY(-2px);
+    transition: .2s;
+}
+.planCtn{
+    border-radius: 10px; 
+    border: 1px solid rgb(170, 189, 170);
+    box-shadow: #56514b 0px 2px 5px;
+    margin: 0 auto;
+    max-width: 90%;
+    margin-top: 20px;
+}
+.planCtn:last-child{
+    margin-bottom: 75vh;
+}
