@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
 import { useRouter } from 'next/router';
-=======
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
->>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
 
 export default function Header() {
   const auth = getAuth();
@@ -26,12 +23,7 @@ export default function Header() {
             <a className="cl-hamburger hamburger" id="open-sidebar" onClick={toggleSidebar}>☰</a>
           </div>
           <ul className="row nav-ctn">
-<<<<<<< HEAD
-            <li className="col-sm-3 text-center nav-item" onClick={handleHome}>Home</li>
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./Planner">Planner</a></li>
-=======
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./">Home</a></li>
->>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#contact">Contact</a></li>
             <li className="col-sm-3 text-center nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
