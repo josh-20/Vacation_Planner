@@ -4,7 +4,7 @@ import {auth} from "../../firebaseConfig"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import {db} from "../../firebaseConfig"
 import style from '../styles/SignIn.module.css'
-import "./Home"
+import "."
 import { useRouter } from "next/router";
 
 
@@ -14,7 +14,7 @@ export default function SignIn(){
     const [password,setPassword] = useState("");
     async function handleSignIn() {
         signInWithEmailAndPassword(auth, email, password).then(() =>{
-            router.push('/Home');
+            router.push('/');
         })
         .catch((error) => {
             const errorCode = error.code
