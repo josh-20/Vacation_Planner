@@ -24,7 +24,7 @@ export default function Header() {
             <a className="cl-hamburger hamburger" id="open-sidebar" onClick={toggleSidebar}>☰</a>
           </div>
           <ul className="row nav-ctn">
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./">Home</a></li>
+            <li className="col-sm-3 text-center nav-item" onClick={() => {router.push("/")}}>Home</li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
             <li className="col-sm-3 text-center nav-item" onClick={goToContact}>Contact</li>
             <li className="col-sm-3 text-center nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
