@@ -77,7 +77,7 @@ export default function Home() {
     return(
         <div> 
             <div className={style.planCtn}>
-                <h2 className={style.planHeader + " col-sm-6 text-center"}>Plan List</h2>
+                <h2 className={style.planHeader + " col-sm-12 text-center"}>Plan List</h2>
                 {
                     planners.map((planner) =>(
                         <div key={planner.id}>
