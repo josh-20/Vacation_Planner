@@ -3,7 +3,8 @@ import {app} from "../../firebaseConfig"
 import {auth} from "../../firebaseConfig"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import {db} from "../../firebaseConfig"
-import "./Home"
+import style from '../styles/SignIn.module.css'
+import "."
 import { useRouter } from "next/router";
 
 
@@ -13,7 +14,7 @@ export default function SignIn(){
     const [password,setPassword] = useState("");
     async function handleSignIn() {
         signInWithEmailAndPassword(auth, email, password).then(() =>{
-            router.push('/Home');
+            router.push('/');
         })
         .catch((error) => {
             const errorCode = error.code
@@ -23,17 +24,18 @@ export default function SignIn(){
     }
 
     return(
-        <div>
-            <h1>Sign In</h1>
-            <label>
-                Email:
-            </label>
-                <input value={email} onChange={e => setEmail(e.target.value)} type="email" />
-            <label>
-                Password:
-            </label>
-                <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
-            <button onClick={handleSignIn}>Sign In</button>
+        <div className={style.centerAll}>
+            <h1 id={style.signIn}>Sign In</h1>
+            <div className="row">
+                <div className={style.signInCtn + " text-center col-sm-12"}>
+                    <div>Email</div>
+                    <input className={style.email + " col-sm-12"} value={email} onChange={e => setEmail(e.target.value)} type="email" />
+                    <div>Password</div>
+                    <input className={style.password + " col-sm-12"} value={password} onChange={e => setPassword(e.target.value)} type="password" />
+                    <div></div>
+                    <button className={style.button + " col-sm-12"} onClick={handleSignIn}>Sign In</button>
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,0 +1,35 @@
+.centerAll{
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 250px;
+}
+#signIn{
+    margin-bottom: 50px;
+}
+.email{
+    max-width: 250px;
+    margin-bottom: 25px;
+}
+.password{
+    max-width: 250px;
+    margin-bottom: 25px;
+}
+.button{
+    max-width: 100px;
+    margin-bottom: 25px;
+    box-shadow: #56514b 0px 1px 2px;
+}
+.button:hover{
+    animation: bounce .25s infinite alternate;
+
+}
+@keyframes bounce{
+    from{
+        transform: translateY(0px);
+        
+    }
+    to{
+        transform: translateY(-3px);
+        box-shadow: #56514b 0px 5px 4px;
+    }
+}

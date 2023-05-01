@@ -15,6 +15,7 @@ type Message = {
   authorEmail: string,
   content: string,
 }
+<<<<<<< HEAD
 
 type Chat = {
   id: string
@@ -23,6 +24,10 @@ type Chat = {
   createdAt: FieldValue,
 
 }
+=======
+const key = "edab3a16d1fc4f7fa2e32357232904";
+export default function Planner() {
+>>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
 
 
 
@@ -31,12 +36,19 @@ export default function Planner() {
     const router = useRouter();
     const id = router.query!.id as string;
     const [longitude,setLongitude] = useState(0);
-    const[latitude,setLatitude] = useState(0);
+    const [latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
     const [chat,setChat] = useState<Chat[]>([]);
     const [message, setMessage] = useState('');
+<<<<<<< HEAD
     const [planner, setPlanner] = useState(null);
     const [chatId, setChatId] = useState('');
+=======
+    const [newPlannerName, setNewRoomName] = useState('');
+    const [newCode, setNewCode] = useState('');
+    const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
+
+>>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
 
     useEffect (() => { 
           const watch = navigator.geolocation.watchPosition((location) => {
@@ -47,6 +59,11 @@ export default function Planner() {
           }, {
             enableHighAccuracy: true,
           });
+<<<<<<< HEAD
+=======
+          getForecast();
+          return() => navigator.geolocation.clearWatch(watch);
+>>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
 
           async function loadchat() {
             const chats = await getDocs(
@@ -65,6 +82,7 @@ export default function Planner() {
           loadchat()
           return() => navigator.geolocation.clearWatch(watch);
       },[])
+<<<<<<< HEAD
 
       async function createChat() {
         const coll = collection(db,`planners/${id}/chat`);
@@ -82,11 +100,33 @@ export default function Planner() {
         }        
       }
 
+=======
+    async function loadChat() {
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, "chat"),
+          where("creatorId", "==", auth.currentUser!.uid)
+        )
+      )
+    }
+    async function getForecast() {
+        const response = fetch(forecastWeatherUrl, {
+            method: 'GET',
+            cache: "no-cache",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const data = await (await response).json();
+        console.log(data)
+    }
+    
+>>>>>>> 3e8dcda98245f64cbfb2a4cf126809b43ceea0b0
     return (
         <div>
             <div>
-                Long: {longitude}
                 Lat: {latitude}
+                Lon: {longitude}
             </div>
             <button onClick={() => {createChat()}}>Chat</button>
             Planner Page!
