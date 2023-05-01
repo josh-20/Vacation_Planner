@@ -58,9 +58,7 @@ export default function Home() {
     }
     // view planner selected.
     function handleViewPlan(plannerId: string){
-        
         router.push({pathname: "/Planner", query: {id: plannerId}});
-        
     }
 
     useEffect(() => {
@@ -78,31 +76,31 @@ export default function Home() {
 
     return(
         <div> 
-            <div className="row">
-                <div className={style.planCtn}>
-                    <h2 className={style.planHeader + " col-sm-6 text-center"}>Plan List</h2>
-                    {
-                        planners.map((planner) =>(
-                            <div className=" col-sm-6 text-center" key={planner.id}>
-                                <div className={style.planName + " col-sm-12 text-center"}>{planner.name}</div>
+            <div className={style.planCtn}>
+                <h2 className={style.planHeader + " col-sm-6 text-center"}>Plan List</h2>
+                {
+                    planners.map((planner) =>(
+                        <div key={planner.id}>
+                            <div className="row">
+                                <div className={style.planName + " col-sm-6 text-center"}>{planner.name}</div>
                                 <button className={style.planButton + " col-sm-6 text-center"}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                <div className={"col-sm-12 " + style.underline}></div>
                             </div>
-                        ))
-                    }
-                    <div className={"text-center " + style.createPlanCtn}>
-                        <div className={style.planName}>
-                            
                         </div>
-                        <div className={style.planName}> Plan Name</div>
-                        <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
-                        <div className={style.planName}> Room Code</div>
-                        <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
-                        <div>
-                            <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
-                        </div>
+                    ))
+                }
+                <div className={"text-center " + style.createPlanCtn}>
+                    <div className={style.planName}></div>
+                    <div className={style.planName}> Plan Name</div>
+                    <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                    <div className={style.planName}> Room Code</div>
+                    <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
+                    <div>
+                        <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
+ 
     )
 }
