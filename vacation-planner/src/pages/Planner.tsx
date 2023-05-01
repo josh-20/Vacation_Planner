@@ -137,30 +137,29 @@ export default function Planner() {
     return (
         <div>
             <div>
-                Lat: {latitude}
-            </div>
-            <div>
-                Lon: {longitude}
-            </div>
-            <div>
               {chatCount > 0 &&
               <div className={style.chatBox}>
-                {messages.map((message) => (
+                {messages.slice().reverse().map((message) => (
                   <div className={style.messages} key={message.id}>
-                    {message.authorEmail}:
-                    &emsp;
-                    {message.content}
+                    <div>
+                      <div>
+                        {message.authorEmail}
+                      </div>
+                      {message.content}
+                    </div>
                   </div>
                 ))
                 }
-                <input className={style.chatInput} onChange={e => setMessage(e.target.value)}/>
+                <div className="row">
+                <input className={style.chatInput + " col-sm-9"} onChange={e => setMessage(e.target.value)}/>
                 <button className={style.chatButton} onClick={sendMessage}>Send</button>
+                </div>
               </div>
               }
             </div>
             
             
-            <button onClick={() => {createChat()}}>Chat</button>
+            <button className={style.createChatButton} onClick={() => {createChat()}}>Chat</button>
         </div>
     )
 }
