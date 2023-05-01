@@ -60,7 +60,9 @@ export default function Planner() {
         const chatData = await getCountFromServer(coll);
         setChatCount(chatData.data().count);
       }
-      loadCount();     
+      loadCount();
+      
+      // load chat from rtdb
       const watch = navigator.geolocation.watchPosition((location) => {
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
@@ -89,6 +91,7 @@ export default function Planner() {
             setChatCount(chatData.data().count);
         }  
       }
+
     async function sendMessage() {
       if(!chatId) return;
       const roomRef = ref(rtdb, `/messages/${chatId}`)
