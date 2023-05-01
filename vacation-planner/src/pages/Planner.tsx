@@ -2,7 +2,7 @@ import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { query, collection, addDoc, getDocs, where,doc, serverTimestamp, FieldValue, getCountFromServer, AggregateField } from "firebase/firestore";
+import { query, collection, getDoc, addDoc, updateDoc, getDocs, where, doc, serverTimestamp, FieldValue, getCountFromServer, AggregateField } from "firebase/firestore";
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
@@ -22,8 +22,7 @@ type Chat = {
   id: string
   name: string,
   createdBy: string,
-  createdAt: FieldValue,
-
+  createdAt: FieldValue
 }
 const key = "edab3a16d1fc4f7fa2e32357232904";
 
@@ -35,18 +34,23 @@ export default function Planner() {
     const [latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
     const [message, setMessage] = useState('');
+    const [chats, setChats] = useState<Chat []>([])
     const [chatId, setChatId] = useState('');
     const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
     const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
 
+    useEffect(() => {
+        if (chatCount > 0) {
+          getChat()
+        }
+    })
 
     useEffect(() =>{
       setMessages([]);
       const roomRef = ref(rtdb, `/messages/${chatId}`)
-
       const unsubcribe = onChildAdded(roomRef, (data) => {
-        console.log("Message recieved");
+        console.log("Message received");
         const message: Message = {...data.val(), id: data.key};
         setMessages((m) => [message, ...m]);
         console.log(messages);
@@ -72,24 +76,40 @@ export default function Planner() {
       });
       getForecast();
       return() => navigator.geolocation.clearWatch(watch);
-      },[])
+    },[])
 
-      async function createChat() {
-        if(chatCount < 1){
-          const chatRef = collection(db, `planners/${id}/chat`);
-            const chatRoom = {
-                name: auth.currentUser!.email,
-                createdBy: auth.currentUser!.uid,
-                createdAt: serverTimestamp(),
-            }
-            const docRef = await addDoc(chatRef, chatRoom);
-            (chatRoom as Chat).id = docRef.id;
-            setChatId(docRef.id);
-            const coll = collection(db,`planners/${id}/chat`);
-            const chatData = await getCountFromServer(coll);
-            setChatCount(chatData.data().count);
+    async function getChat() {
+        const planner = doc(db, "planners", id)
+        const docSnap = await getDoc(planner)
+        const data = docSnap.data()
+        setChatId(data!.chatId)
+    }
+
+    async function createChat() {
+      if(chatCount < 1){
+        const chatRef = collection(db, `planners/${id}/chat`);
+          const chatRoom = {
+              name: auth.currentUser!.email,
+              createdBy: auth.currentUser!.uid,
+              createdAt: serverTimestamp()
+          }
+
+          const docRef = await addDoc(chatRef, chatRoom);
+          (chatRoom as Chat).id = docRef.id;
+          setChatId(docRef.id);
+
+          const planner = doc(db, "planners", id)
+          const docSnap = await getDoc(planner)
+          await updateDoc(planner, {
+            chatId: docRef.id
+          })
+
+          const coll = collection(db,`planners/${id}/chat`);
+          const chatData = await getCountFromServer(coll);
+          setChatCount(chatData.data().count);
         }  
       }
+
     async function sendMessage() {
       if(!chatId) return;
       const roomRef = ref(rtdb, `/messages/${chatId}`)
@@ -100,7 +120,8 @@ export default function Planner() {
         content: message,
     });
         
-      }
+    }
+
     async function getForecast() {
         const response = fetch(forecastWeatherUrl, {
             method: 'GET',
@@ -117,6 +138,8 @@ export default function Planner() {
         <div>
             <div>
                 Lat: {latitude}
+            </div>
+            <div>
                 Lon: {longitude}
             </div>
             <div>

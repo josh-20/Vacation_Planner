@@ -11,7 +11,8 @@ type Planner = {
     id: string,
     creatorId: string,
     code: string,
-    name: string
+    name: string,
+    chatId: string
   }
 
 export default function Home() {
@@ -28,7 +29,7 @@ export default function Home() {
     useEffect(() => {
         async function loadPlans() {
             try {
-                const data = await getDocs(query(collection(db, "planners")))
+                const data = await getDocs(query(collection(db, "planners"), where("creatorId", "==", auth.currentUser?.uid)))
                 const myplans: Planner[] = [];
                 data.forEach((doc) => {
                     myplans.push({...doc.data(), id: doc.id} as Planner);
@@ -50,6 +51,7 @@ export default function Home() {
             name: newPlannerName,
             code: newCode,
             creatorId: auth.currentUser!.uid,
+            chatId: ""
           }
            // adding doc for planner. Still need to add A chat room for each planner.
         const docRef = await addDoc(collection(db, "planners"), planner);
