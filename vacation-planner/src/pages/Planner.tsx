@@ -44,7 +44,6 @@ export default function Planner() {
     useEffect(() =>{
       setMessages([]);
       const roomRef = ref(rtdb, `/messages/${chatId}`)
-
       const unsubcribe = onChildAdded(roomRef, (data) => {
         console.log("Message recieved");
         const message: Message = {...data.val(), id: data.key};
@@ -124,8 +123,7 @@ export default function Planner() {
               <div className={style.chatBox}>
                 {messages.map((message) => (
                   <div className={style.messages} key={message.id}>
-                    {message.authorEmail}:
-                    &emsp;
+                    {message.authorEmail}
                     {message.content}
                   </div>
                 ))
