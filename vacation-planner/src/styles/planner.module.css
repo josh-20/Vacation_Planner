@@ -19,6 +19,13 @@
     border: #56514b 2px solid;
     font-weight: 500;
     border-radius: 10px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+.underline{
+    border-bottom: #56514b 1px solid;
+    max-width: 90%;
+    margin: 0 auto;
     margin-bottom: 20px;
 }
 .planInput{
