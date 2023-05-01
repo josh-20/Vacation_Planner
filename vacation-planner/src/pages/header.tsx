@@ -13,6 +13,9 @@ export default function Header() {
     router.push({pathname: "/contact"});
     
 }
+function goToHome(){
+  router.push({pathname: "/"});
+}
   return (
     <>
       <div className="header-title-ctn">
@@ -24,7 +27,7 @@ export default function Header() {
             <a className="cl-hamburger hamburger" id="open-sidebar" onClick={toggleSidebar}>☰</a>
           </div>
           <ul className="row nav-ctn">
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./">Home</a></li>
+            <li className="col-sm-3 text-center nav-item" onClick={goToHome}>Home</li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
             <li className="col-sm-3 text-center nav-item" onClick={goToContact}>Contact</li>
             <li className="col-sm-3 text-center nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
@@ -33,7 +36,7 @@ export default function Header() {
         <nav className={`header-sidebar ${isSidebarVisible ? 'visible' : 'not-visible'}`}>
           <a className= "cl-hamburger hamburger" id="close-sidebar" onClick={toggleSidebar}>☰</a>
           <ul className="nav-ctn">
-            <li className="side-item"><a href="./" className="nav-item">Home</a></li>
+            <li className="side-item" onClick={goToHome}>Home</li>
             <li className="side-item"><a className="nav-item">Services</a></li>
             <li className="side-item nav-item" onClick={goToContact}>Contact</li>
             <li className="side-item nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
