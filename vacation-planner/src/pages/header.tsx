@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
+import {getAuth, signOut} from "firebase/auth";
+import { useRouter } from "next/router";
 export default function Header() {
+  const router = useRouter();
   const auth = getAuth();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const router = useRouter();
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   }
-  function handleHome() {
-    router.push("/Home");
-  }
+  function goToContact(){
+    console.log('clicked')
+    router.push({pathname: "/contact"});
+    
+}
   return (
     <>
       <div className="header-title-ctn">
@@ -25,7 +27,7 @@ export default function Header() {
           <ul className="row nav-ctn">
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="./">Home</a></li>
             <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#contact">Contact</a></li>
+            <li className="col-sm-3 text-center nav-item" onClick={goToContact}>Contact</li>
             <li className="col-sm-3 text-center nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
           </ul>
         </nav>
@@ -34,7 +36,7 @@ export default function Header() {
           <ul className="nav-ctn">
             <li className="side-item"><a href="./" className="nav-item">Home</a></li>
             <li className="side-item"><a className="nav-item">Services</a></li>
-            <li className="side-item"><a className="nav-item">Contact</a></li>
+            <li className="side-item nav-item" onClick={goToContact}>Contact</li>
             <li className="side-item nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
             <li className="side-item"><a className="nav-item"></a></li>
           </ul>
