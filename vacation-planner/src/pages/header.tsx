@@ -5,6 +5,7 @@ export default function Header() {
   const router = useRouter();
   const auth = getAuth();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const router = useRouter();
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   }
