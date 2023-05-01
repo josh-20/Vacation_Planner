@@ -2,7 +2,7 @@ import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { query, collection, addDoc, getDocs, where,doc, serverTimestamp, FieldValue } from "firebase/firestore";
+import { query, collection, addDoc, getDocs, where,doc, serverTimestamp, FieldValue, getCountFromServer } from "firebase/firestore";
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
@@ -67,7 +67,9 @@ export default function Planner() {
       },[])
 
       async function createChat() {
-        if(chat.length < 1){
+        const coll = collection(db,`planners/${id}/chat`);
+        const chatCount = await getCountFromServer(coll);
+        if(chatCount.data().count < 1){
           const chatRef = collection(db, `planners/${id}/chat`);
             const chatRoom = {
                 name: auth.currentUser!.email,
