@@ -77,8 +77,7 @@ export default function Home() {
     },[loggedIn,loading])
 
     return(
-        <div>
-            
+        <div> 
             <div className="row">
                 <div className={style.planCtn}>
                     <h2 className={style.planHeader + " col-sm-6 text-center"}>Plan List</h2>
@@ -91,10 +90,15 @@ export default function Home() {
                         ))
                     }
                     <div className={"text-center " + style.createPlanCtn}>
-                    <div className={style.planName + " " + style.planNameCenter}>Plan Name</div>
+                        <div className={style.planName}>
+                            
+                        </div>
+                        <div className={style.planName}> Plan Name</div>
                         <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                        <div className={style.planName}> Room Code</div>
+                        <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
                         <div>
-                        <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
+                            <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
                         </div>
                     </div>
                 </div>
