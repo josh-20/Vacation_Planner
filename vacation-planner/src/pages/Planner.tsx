@@ -35,11 +35,25 @@ export default function Planner() {
     const [latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
     const [message, setMessage] = useState('');
-    const [planner, setPlanner] = useState(null);
     const [chatId, setChatId] = useState('');
+    const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
     const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
 
+
+    useEffect(() =>{
+      setMessages([]);
+      const roomRef = ref(rtdb, `/messages/${chatId}`)
+
+      const unsubcribe = onChildAdded(roomRef, (data) => {
+        console.log("Message recieved");
+        const message: Message = {...data.val(), id: data.key};
+        setMessages((m) => [message, ...m]);
+        console.log(messages);
+      });
+      
+      return unsubcribe;
+    },[chatId])
 
     useEffect (() => {
       async function loadCount(){
@@ -47,7 +61,7 @@ export default function Planner() {
         const chatData = await getCountFromServer(coll);
         setChatCount(chatData.data().count);
       }
-      loadCount(); 
+      loadCount();     
       const watch = navigator.geolocation.watchPosition((location) => {
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
@@ -71,9 +85,20 @@ export default function Planner() {
             const docRef = await addDoc(chatRef, chatRoom);
             (chatRoom as Chat).id = docRef.id;
             setChatId(docRef.id);
+            const coll = collection(db,`planners/${id}/chat`);
+            const chatData = await getCountFromServer(coll);
+            setChatCount(chatData.data().count);
         }  
       }
-      async function sendMessage() {
+    async function sendMessage() {
+      if(!chatId) return;
+      const roomRef = ref(rtdb, `/messages/${chatId}`)
+      const newMessageRef = push(roomRef);
+      set(newMessageRef, {
+        authorId: auth.currentUser!.uid,
+        authorEmail: auth.currentUser!.email,
+        content: message,
+    });
         
       }
     async function getForecast() {
@@ -94,12 +119,24 @@ export default function Planner() {
                 Lat: {latitude}
                 Lon: {longitude}
             </div>
-            {chatCount > 0 &&
-            <div className={style.chatBox}>
-              <input onChange={e => setMessage(e.target.value)}/>
-              <button onClick={sendMessage}>Send</button>
+            <div>
+              {chatCount > 0 &&
+              <div className={style.chatBox}>
+                {messages.map((message) => (
+                  <div className={style.messages} key={message.id}>
+                    {message.authorEmail}:
+                    &emsp;
+                    {message.content}
+                  </div>
+                ))
+                }
+                <input className={style.chatInput} onChange={e => setMessage(e.target.value)}/>
+                <button className={style.chatButton} onClick={sendMessage}>Send</button>
+              </div>
+              }
             </div>
-            }
+            
+            
             <button onClick={() => {createChat()}}>Chat</button>
         </div>
     )

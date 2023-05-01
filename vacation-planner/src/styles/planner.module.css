@@ -53,4 +53,20 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-width: 500px;
 }
+.chatInput {
+    border: unset;
+    border-radius: 0px;
+    border-top: 1px solid black;
+  }
+.sendButton {
+    border-radius: 0px;
+    max-width: 125px;
+  }
+.messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 16px;
+  }
