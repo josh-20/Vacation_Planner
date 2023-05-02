@@ -34,6 +34,7 @@ export default function SignIn(){
                     <input className={style.password + " col-sm-12"} value={password} onChange={e => setPassword(e.target.value)} type="password" />
                     <div></div>
                     <button className={style.button + " col-sm-12"} onClick={handleSignIn}>Sign In</button>
+                    <button className={style.button} onClick={() => {router.push("/SignUp")}}>Sign Up</button>
                 </div>
             </div>
         </div>
