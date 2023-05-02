@@ -1,3 +1,4 @@
+
 import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
@@ -8,7 +9,8 @@ import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
 import { count } from "console";
 import  style  from "../styles/planner.module.css";
-
+import MapComponent from "./MapComponent";
+import { Wrapper } from "@googlemaps/react-wrapper";
 
 
 type Message = {
@@ -24,12 +26,13 @@ type Chat = {
   createdBy: string,
   createdAt: FieldValue
 }
-const key = "edab3a16d1fc4f7fa2e32357232904";
+const key = process.env.NEXT_PUBLIC_API_KEY as string;
 
 export default function Planner() {
     const auth = getAuth();
     const router = useRouter();
     const id = router.query!.id as string;
+    const [showChatBox, setShowChatBox] = useState(false);
     const [longitude,setLongitude] = useState(0);
     const [latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
@@ -39,6 +42,15 @@ export default function Planner() {
     const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
     const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
+    const center = {
+      lat: latitude,
+      lng: longitude,
+    }
+    const zoom = 4;
+
+    function toggleChatBox() {
+      setShowChatBox(!showChatBox);
+    }
 
     useEffect(() => {
         if (chatCount > 0) {
@@ -134,11 +146,15 @@ export default function Planner() {
         const data = await (await response).json();
         console.log(data)
     }
+    function handleCreateChatClick() {
+      createChat();
+      toggleChatBox();
+    }
     
     return (
         <div className={style.container}>
             <div className={style.chatBoxCtn}>
-              {chatCount > 0 &&
+              {chatCount > 0 && showChatBox &&
               <div className={style.chatBox}>
                 {messages.slice().reverse().map((message) => (
                   <div className={style.messages} key={message.id}>
@@ -160,7 +176,18 @@ export default function Planner() {
               </div>
               }
             </div>
-            <button className={style.createChatButton + " text-center"} onClick={() => {createChat()}}>Chat</button>
+              <button className={style.createChatButton + " text-center"} onClick={() => {handleCreateChatClick()}}>Chat </button>
+        <div className="center row">
+            <div className="center col">
+                <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
+                  <MapComponent />
+                </Wrapper>
+            </div>
+                
+            <div className="center col">
+                Put your places here
+            </div>
+
         </div>
-    )
+      </div> )
 }
