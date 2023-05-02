@@ -136,9 +136,7 @@ export default function Home() {
                router.push("/SignIn")
             }
         })
-
         return checkAuth;
-
     },[loggedIn,loading])
 
     return(
