@@ -75,6 +75,7 @@
     z-index: 2;
     min-width: 200px;
     max-width: 275px;
+    background-color: #ffffff;
 }
 .createChatButton{
     border-radius: 50%;
@@ -132,6 +133,7 @@
     display: flex;
     flex-direction: column-reverse;
     padding: 16px;
+    background-color: #ffffff;
 }
 .messages:nth-child(2n + 1){
     background-color: #f3f9f3;

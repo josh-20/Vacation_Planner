@@ -183,11 +183,6 @@ export default function Planner() {
                   <MapComponent />
                 </Wrapper>
             </div>
-                
-            <div className="center col">
-                Put your places here
-            </div>
-
         </div>
       </div> )
 }
