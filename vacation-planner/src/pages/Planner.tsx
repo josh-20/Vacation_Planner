@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react"
-import { Wrapper } from "@googlemaps/react-wrapper";
+import { useEffect, useState, ReactElement } from "react"
+import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import MapComponent from "./MapComponent";
 
 export default function Planner() {
@@ -66,12 +66,16 @@ export default function Planner() {
           });
     }, [])*/
 
-
+    const render = (status: Status): ReactElement => {
+      if (status === Status.LOADING) return <h3>{status} ..</h3>;
+      if (status === Status.FAILURE) return <h3>{status} ...</h3>;
+      return <h3>Done!</h3>
+    };
 
     return (
         <div className="center row">
             <div className="center col">
-                <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
+                <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI" render={render}>
                   <MapComponent center={center} zoom={zoom}></MapComponent>
                 </Wrapper>
             </div>
