@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { count } from "console";
 import  style  from "../styles/planner.module.css";
 import MapComponent from "./MapComponent";
-
+import { Wrapper } from "@googlemaps/react-wrapper";
 
 
 type Message = {
@@ -26,7 +26,7 @@ type Chat = {
   createdBy: string,
   createdAt: FieldValue
 }
-const key = "edab3a16d1fc4f7fa2e32357232904";
+const key = process.env.NEXT_PUBLIC_API_KEY as string;
 
 export default function Planner() {
     const auth = getAuth();
@@ -42,6 +42,11 @@ export default function Planner() {
     const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
     const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
+    const center = {
+      lat: latitude,
+      lng: longitude,
+    }
+    const zoom = 4;
 
     function toggleChatBox() {
       setShowChatBox(!showChatBox);
@@ -175,7 +180,7 @@ export default function Planner() {
         <div className="center row">
             <div className="center col">
                 <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
-                  <MapComponent center={center} zoom={zoom}></MapComponent>
+                  <MapComponent />
                 </Wrapper>
             </div>
                 
