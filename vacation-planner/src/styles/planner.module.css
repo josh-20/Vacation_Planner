@@ -60,30 +60,35 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-width: 500px;
     border: #56514b 2px solid;
     padding: 20px;
-    margin-left: 1%;
     margin-bottom: 20px;
     overflow-y: scroll;
     max-height: 500px;
     border-radius: 5px;
+    position: absolute;
+    bottom: -170px;
+    right: 10px;
+    z-index: 2;
+    min-width: 200px;
+    max-width: 275px;
 }
 .createChatButton{
-    margin-left: 1%;
-    margin-bottom: 65vh;
     border-radius: 50%;
     background-color: #56514b;
     color: #f3f9f3;
     height: 50px;
     width: 50px;
     border: #56514b 2px solid;
+    position: absolute;
+    right: 10px;
+    bottom: -210px;
+    z-index: 1;
 }
 .authorEmail{
     font-size: 16px;
     color: #56514b;
     font-weight: 500;
-    margin: 0px 0px 0px 0px;
     text-decoration: underline;
 }
 .messageContent{
@@ -98,10 +103,10 @@
 }
 .chatInput {
     margin-left: 12px;
-    margin-bottom: 1px;
-    margin-top: 1px;
+    width: 175px;
 }
 .chatButton{
+    width: 25%;
     max-width: 100px;
     border-radius: 10px;
     background-color: #56514b;
@@ -118,13 +123,49 @@
 .sendButton {
     border-radius: 0px;
     max-width: 125px;
-  }
+}
 .messages {
     flex: 1;
     display: flex;
     flex-direction: column-reverse;
     padding: 16px;
-  }
-  .messages:nth-child(2n + 1){
+}
+.messages:nth-child(2n + 1){
     background-color: #f3f9f3;
-  }
+}
+.container{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+}
+@media(min-width: 576px){
+    .chatBox {
+        position: absolute;
+        bottom: -175px;
+        min-width: 500px;
+        width: 500px;
+        overflow-x: hidden;
+    }
+    .chatInput {
+        margin-left: 12px;
+        margin-bottom: 1px;
+        margin-top: 1px;
+        width: 80%;
+    }
+    .chatButton{
+        width: 15%;
+        max-width: 100px;
+    }
+
+    .createChatButton{
+        border-radius: 50%;
+        background-color: #56514b;
+        color: #f3f9f3;
+        height: 50px;
+        width: 50px;
+        border: #56514b 2px solid;
+        position: absolute;
+        right: 10px;
+        z-index: 1;
+    }
+}
