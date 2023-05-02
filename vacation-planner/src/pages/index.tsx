@@ -62,6 +62,21 @@ export default function Home() {
     function handleViewPlan(plannerId: string){
         router.push({pathname: "/Planner", query: {id: plannerId}});
     }
+    async function handleJoinPlan() {
+        if(!newCode || !newPlannerName) {
+            return;
+        }
+        try {
+            const data = await getDocs(query(collection(db, "planners"), where("name", "==", newPlannerName), where("code","==", newCode)))
+            const myplans: Planner[] = [];
+            data.forEach((doc) => {
+                myplans.push({...doc.data(), id: doc.id} as Planner);
+            });
+            setPlanners(myplans);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         const checkAuth = onAuthStateChanged(auth, (user) =>{
@@ -99,6 +114,7 @@ export default function Home() {
                     <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
                     <div>
                         <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
+                        <button className={style.planButton} onClick={handleJoinPlan}>Join</button>
                     </div>
                 </div>
             </div>
