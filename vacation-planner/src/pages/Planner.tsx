@@ -112,6 +112,7 @@ export default function Planner() {
 
     async function sendMessage() {
       if(!chatId) return;
+      if(message.length < 1) return;
       const roomRef = ref(rtdb, `/messages/${chatId}`)
       const newMessageRef = push(roomRef);
       set(newMessageRef, {
@@ -119,7 +120,7 @@ export default function Planner() {
         authorEmail: auth.currentUser!.email,
         content: message,
     });
-        
+      setMessage(''); 
     }
 
     async function getForecast() {
@@ -142,16 +143,18 @@ export default function Planner() {
                 {messages.slice().reverse().map((message) => (
                   <div className={style.messages} key={message.id}>
                     <div>
-                      <div>
-                        {message.authorEmail}
+                      <div className={style.authorEmail}>
+                        <b>{message.authorEmail}</b>
                       </div>
-                      {message.content}
+                      <div className={style.messageContent}>
+                        {message.content}
+                      </div>
                     </div>
                   </div>
                 ))
                 }
                 <div className="row">
-                <input className={style.chatInput + " col-sm-9"} onChange={e => setMessage(e.target.value)}/>
+                <input className={style.chatInput + " col-sm-9"} onChange={e => setMessage(e.target.value)} value={message}/>
                 <button className={style.chatButton} onClick={sendMessage}>Send</button>
                 </div>
               </div>
