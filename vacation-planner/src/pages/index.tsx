@@ -1,7 +1,7 @@
 import { useState ,useEffect, useContext } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { addDoc,collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc,collection, getDoc, getDocs, query, where,doc } from "firebase/firestore";
 import { db,rtdb } from "../../firebaseConfig";
 import "./SignIn";
 import ".";
@@ -76,6 +76,7 @@ export default function Home() {
         } catch (error) {
             console.error(error);
         }
+           // adding doc for planner. Still need to add A chat room for each planner.
     }
 
     useEffect(() => {
