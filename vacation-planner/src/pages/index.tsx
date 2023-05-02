@@ -1,11 +1,13 @@
 import { useState ,useEffect, useContext } from "react";
 import { User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { addDoc,collection, getDoc, getDocs, query, where,doc } from "firebase/firestore";
+import { addDoc, getDoc, getDocs, query, where,doc, deleteDoc, updateDoc, deleteField, collection } from "firebase/firestore";
 import { db,rtdb } from "../../firebaseConfig";
 import "./SignIn";
 import ".";
 import style from '../styles/planner.module.css';
+import {ref, onChildAdded, push, set, onChildRemoved, remove, child} from "firebase/database";
+import { firestore } from "firebase-admin";
 
 type Planner = {
     id: string,
@@ -14,7 +16,13 @@ type Planner = {
     name: string,
     chatId: string
   }
-
+type JoinPlan = {
+    id: string,
+    creatorId: string,
+    name: string,
+    code: string,
+    parentId: string
+}
 export default function Home() {
     const auth = getAuth();
     const router = useRouter();
@@ -24,13 +32,18 @@ export default function Home() {
     const [newCode, setCode] = useState('');
     const [newPlannerName, setNewPlannerName] = useState('');
     const [planners, setPlanners] = useState<Planner[]>([])
-
-    const plannerCollectionRef = collection(db, "planners");
+    const [joinedPlanners,setJoinedPlanners] = useState<JoinPlan[]>([]);
     useEffect(() => {
         async function loadPlans() {
             try {
                 const data = await getDocs(query(collection(db, "planners"), where("creatorId", "==", auth.currentUser?.uid)))
+                const joinData = await getDocs(query(collection(db, "joinPlan"), where("creatorId", "==", auth.currentUser?.uid)));
+                const myJoined: JoinPlan[] = [];
                 const myplans: Planner[] = [];
+                joinData.forEach((doc) =>{
+                    myJoined.push({...doc.data(), id: doc.id} as JoinPlan);
+                })
+                setJoinedPlanners(myJoined);
                 data.forEach((doc) => {
                     myplans.push({...doc.data(), id: doc.id} as Planner);
                 });
@@ -64,21 +77,55 @@ export default function Home() {
     function handleViewPlan(plannerId: string){
         router.push({pathname: "/Planner", query: {id: plannerId}});
     }
+    // View a joined plan
+    async function handleViewJoin(parentId: string) {
+        router.push({pathname: "/Planner", query: {id: parentId}})
+    }
+    //delete joinedPlan
+    async function handleDeleteJoin(planId: string) {
+        await deleteDoc(doc(db, "joinPlan", planId));
+        setJoinedPlanners((current) => current.filter((planner) => planner.id !=planId))
+    }
+
+    // join a plan 
     async function handleJoinPlan() {
         if(!newCode || !newPlannerName) {
             return;
         }
         try {
-            const data = await getDocs(query(collection(db, "planners"), where("name", "==", newPlannerName), where("code","==", newCode)))
-            const myplans: Planner[] = [];
-            data.forEach((doc) => {
-                myplans.push({...doc.data(), id: doc.id} as Planner);
+            let ParentId = "";
+            let creatorId = "";
+            const dataSnap = await getDocs(query(collection(db, "planners"), where("name", "==", newPlannerName), where("code", "==", newCode)));
+            dataSnap.forEach((doc) => {
+                ParentId = doc.id;
+                creatorId = doc.data().creatorId;
             });
-            setPlanners(myplans);
+            if (auth.currentUser?.uid == creatorId){
+                return;
+            }
+            const joinPlan = {
+                name: newPlannerName,
+                code: newCode,
+                creatorId: auth.currentUser?.uid,
+                parentId: ParentId
+            }
+            const joinRef = await addDoc(collection(db,"joinPlan"), joinPlan);
+            (joinPlan as JoinPlan).id = joinRef.id;
+
+            setJoinedPlanners([...joinedPlanners, joinPlan as JoinPlan]);
+            setCode('');
+            setNewPlannerName('');
         } catch (error) {
             console.error(error);
         }
            // adding doc for planner. Still need to add A chat room for each planner.
+    }
+
+
+
+    async function handleDelete(id: string) {
+        await deleteDoc(doc(db, "planners", id));
+        setPlanners((current) => current.filter((planner) => planner.id != id))
     }
 
     useEffect(() => {
@@ -105,6 +152,22 @@ export default function Home() {
                                 <div className={style.planName + " col-sm-6 text-center"}>{planner.name}</div>
                                 <div className="col-sm-6 text-center">
                                     <button className={style.planButton}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                    <button className={style.planButton} onClick={() =>{handleDelete(planner.id), planner.chatId}}>Delete</button>
+                                </div>
+                                <div className={"col-sm-12 " + style.underline}></div>
+                            </div>
+                        </div>
+                    ))
+                }
+                <h2 className={style.planHeader + " col-sm-12 text-center"}>Joined List</h2>
+                {
+                    joinedPlanners.map((plans) => (
+                        <div key={plans.id}>
+                            <div className="row">
+                                <div className={style.planName + " col-sm-6 text-center"}>{plans.name}</div>
+                                <div className="col-sm-6 text-center">
+                                    <button className={style.planButton}  onClick={() =>{handleViewJoin(plans.parentId)}}>View</button>
+                                    <button className={style.planButton} onClick={() =>{handleDeleteJoin(plans.id)}}>Delete</button>
                                 </div>
                                 <div className={"col-sm-12 " + style.underline}></div>
                             </div>
