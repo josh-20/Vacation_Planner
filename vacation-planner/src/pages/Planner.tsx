@@ -1,3 +1,4 @@
+
 import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
@@ -8,6 +9,7 @@ import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
 import { count } from "console";
 import  style  from "../styles/planner.module.css";
+import MapComponent from "./MapComponent";
 
 
 
@@ -170,6 +172,17 @@ export default function Planner() {
               }
             </div>
               <button className={style.createChatButton + " text-center"} onClick={() => {handleCreateChatClick()}}>Chat </button>
+        <div className="center row">
+            <div className="center col">
+                <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
+                  <MapComponent center={center} zoom={zoom}></MapComponent>
+                </Wrapper>
+            </div>
+                
+            <div className="center col">
+                Put your places here
+            </div>
+
         </div>
-    )
+      </div> )
 }
