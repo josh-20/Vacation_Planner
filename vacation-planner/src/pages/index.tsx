@@ -57,6 +57,8 @@ export default function Home() {
         const docRef = await addDoc(collection(db, "planners"), planner);
         (planner as Planner).id = docRef.id;
         setPlanners([...planners, planner as Planner]);
+        setCode('');
+        setNewPlannerName('');
     }
     // view planner selected.
     function handleViewPlan(plannerId: string){
@@ -100,7 +102,9 @@ export default function Home() {
                         <div key={planner.id}>
                             <div className="row">
                                 <div className={style.planName + " col-sm-6 text-center"}>{planner.name}</div>
-                                <button className={style.planButton + " col-sm-6 text-center"}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                <div className="col-sm-6 text-center">
+                                    <button className={style.planButton}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                </div>
                                 <div className={"col-sm-12 " + style.underline}></div>
                             </div>
                         </div>
@@ -109,9 +113,9 @@ export default function Home() {
                 <div className={"text-center " + style.createPlanCtn}>
                     <div className={style.planName}></div>
                     <div className={style.planName}> Plan Name</div>
-                    <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                    <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)} value={newPlannerName}/>
                     <div className={style.planName}> Room Code</div>
-                    <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
+                    <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)} value={newCode}/>
                     <div>
                         <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
                         <button className={style.planButton} onClick={handleJoinPlan}>Join</button>
