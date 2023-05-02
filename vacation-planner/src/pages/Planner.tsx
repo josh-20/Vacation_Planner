@@ -1,21 +1,23 @@
 import { useEffect, useState, useRef } from "react"
+import { Wrapper } from "@googlemaps/react-wrapper";
+import MapComponent from "./MapComponent";
 
 export default function Planner() {
 
     const [map, setMap] = useState<google.maps.Map>();
     const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox>();
-    const [mapSearch, setMapSearch] = useState("");
     const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
     const center = { lat: -34.397, lng: 150.644 };
     const zoom = 4;
 
-    useEffect(() => {
+    /*useEffect(() => {
         setMap(new google.maps.Map(document.getElementById("map") as HTMLElement, {center: center, zoom: zoom, mapTypeId: "roadmap"}))
         setSearchBox(new google.maps.places.SearchBox(document.getElementById("mapSearch") as HTMLInputElement))
-        map!.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById("mapSearch") as HTMLInputElement);
+        //map!.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById("mapSearch") as HTMLInputElement);
         map?.addListener("bound_changed", () => {
             searchBox?.setBounds(map.getBounds() as google.maps.LatLngBounds)
         })
+        debugger;
         searchBox!.addListener("places_changed", () => {
             const places = searchBox!.getPlaces();
         
@@ -62,15 +64,16 @@ export default function Planner() {
             });
             map!.fitBounds(bounds);
           });
-    }, [])
+    }, [])*/
 
 
 
     return (
         <div className="center row">
             <div className="center col">
-                <input id="mapSearch" onChange={e => setMapSearch(e.target.value)}></input>
-                <div id="map"></div>
+                <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
+                  <MapComponent center={center} zoom={zoom}></MapComponent>
+                </Wrapper>
             </div>
                 
             <div className="center col">

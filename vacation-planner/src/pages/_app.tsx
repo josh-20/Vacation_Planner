@@ -8,10 +8,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const showHeader = !(typeof window !== "undefined" && (window.location.pathname === "/signin" || window.location.pathname === "/signup"));
   return (
     <>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI&libraries=places&v=weekly"
-      defer
-    ></script>
     {showHeader && <Header />}
     <Component {...pageProps} />
     {showHeader && <Footer />}
