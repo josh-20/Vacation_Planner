@@ -136,8 +136,8 @@ export default function Planner() {
     }
     
     return (
-        <div>
-            <div>
+        <div className={style.container}>
+            <div className={style.chatBoxCtn}>
               {chatCount > 0 &&
               <div className={style.chatBox}>
                 {messages.slice().reverse().map((message) => (
@@ -160,9 +160,7 @@ export default function Planner() {
               </div>
               }
             </div>
-            
-            
-            <button className={style.createChatButton} onClick={() => {createChat()}}>Chat</button>
+            <button className={style.createChatButton + " text-center"} onClick={() => {createChat()}}>Chat</button>
         </div>
     )
 }
