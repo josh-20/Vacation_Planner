@@ -57,6 +57,8 @@ export default function Home() {
         const docRef = await addDoc(collection(db, "planners"), planner);
         (planner as Planner).id = docRef.id;
         setPlanners([...planners, planner as Planner]);
+        setCode('');
+        setNewPlannerName('');
     }
     // view planner selected.
     function handleViewPlan(plannerId: string){
@@ -94,9 +96,9 @@ export default function Home() {
                 <div className={"text-center " + style.createPlanCtn}>
                     <div className={style.planName}></div>
                     <div className={style.planName}> Plan Name</div>
-                    <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)}/>
+                    <input className={"text-left " + style.planInput} onChange={e=>setNewPlannerName(e.target.value)} value={newPlannerName}/>
                     <div className={style.planName}> Room Code</div>
-                    <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)}/>
+                    <input className={"text-left " + style.planInput} onChange={e=>setCode(e.target.value)} value={newCode}/>
                     <div>
                         <button className={"text-center " + style.planButton} value="id" onClick={handleCreatePlan}>Create Plan</button>
                     </div>
