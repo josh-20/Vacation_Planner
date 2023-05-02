@@ -30,6 +30,7 @@ export default function Planner() {
     const auth = getAuth();
     const router = useRouter();
     const id = router.query!.id as string;
+    const [showChatBox, setShowChatBox] = useState(false);
     const [longitude,setLongitude] = useState(0);
     const [latitude,setLatitude] = useState(0);
     const [messages, setMessages] = useState<Message []>([]);
@@ -39,6 +40,10 @@ export default function Planner() {
     const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
     const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
+
+    function toggleChatBox() {
+      setShowChatBox(!showChatBox);
+    }
 
     useEffect(() => {
         if (chatCount > 0) {
@@ -134,11 +139,15 @@ export default function Planner() {
         const data = await (await response).json();
         console.log(data)
     }
+    function handleCreateChatClick() {
+      createChat();
+      toggleChatBox();
+    }
     
     return (
         <div className={style.container}>
             <div className={style.chatBoxCtn}>
-              {chatCount > 0 &&
+              {chatCount > 0 && showChatBox &&
               <div className={style.chatBox}>
                 {messages.slice().reverse().map((message) => (
                   <div className={style.messages} key={message.id}>
@@ -160,7 +169,7 @@ export default function Planner() {
               </div>
               }
             </div>
-            <button className={style.createChatButton + " text-center"} onClick={() => {createChat()}}>Chat</button>
+              <button className={style.createChatButton + " text-center"} onClick={() => {handleCreateChatClick()}}>Chat </button>
         </div>
     )
 }

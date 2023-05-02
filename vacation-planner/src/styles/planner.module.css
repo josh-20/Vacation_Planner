@@ -21,6 +21,9 @@
     border-radius: 10px;
     margin: 0 auto;
     margin-bottom: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    margin-left: 5px;
 }
 .underline{
     border-bottom: #56514b 1px solid;
@@ -137,6 +140,9 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
     min-height: 100vh;
+}
+.hidden{
+    display: none;
 }
 @media(min-width: 576px){
     .chatBox {
