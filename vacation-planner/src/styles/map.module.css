@@ -1,0 +1,10 @@
+.forecastData{
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    font-size: 8px;
+    line-height: .25;
+    margin-top: 10px;
+    color: #56514b;
+    
+}

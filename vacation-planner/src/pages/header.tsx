@@ -9,12 +9,14 @@ export default function Header() {
     setSidebarVisible(!isSidebarVisible);
   }
   function goToContact(){
-    console.log('clicked')
     router.push({pathname: "/contact"});
     
 }
 function goToHome(){
   router.push({pathname: "/"});
+}
+function goToServices(){
+  router.push({pathname: "/Services"});
 }
   return (
     <>
@@ -28,7 +30,7 @@ function goToHome(){
           </div>
           <ul className="row nav-ctn">
             <li className="col-sm-3 text-center nav-item" onClick={goToHome}>Home</li>
-            <li className="col-sm-3 text-center nav-item"><a className="nav-item"href="#services">Services</a></li>
+            <li className="col-sm-3 side-item nav-item text-center" onClick={goToServices}>Services</li>
             <li className="col-sm-3 text-center nav-item" onClick={goToContact}>Contact</li>
             <li className="col-sm-3 text-center nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
           </ul>
@@ -37,7 +39,7 @@ function goToHome(){
           <a className= "cl-hamburger hamburger" id="close-sidebar" onClick={toggleSidebar}>☰</a>
           <ul className="nav-ctn">
             <li className="side-item" onClick={goToHome}>Home</li>
-            <li className="side-item"><a className="nav-item">Services</a></li>
+            <li className="side-item" onClick={goToServices}>Services</li>
             <li className="side-item nav-item" onClick={goToContact}>Contact</li>
             <li className="side-item nav-item" onClick={() => {signOut(auth)}}>Sign Out</li>
             <li className="side-item"><a className="nav-item"></a></li>

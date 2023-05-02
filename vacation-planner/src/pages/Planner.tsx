@@ -1,17 +1,12 @@
-
-import { watch } from "fs";
 import { useState,useEffect } from "react"
 import { Auth, getAuth } from "firebase/auth";
-import { signOut } from "firebase/auth";
 import { query, collection, getDoc, addDoc, updateDoc, getDocs, where, doc, serverTimestamp, FieldValue, getCountFromServer, AggregateField } from "firebase/firestore";
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 import { useRouter } from "next/router";
-import { count } from "console";
 import  style  from "../styles/planner.module.css";
 import MapComponent from "./MapComponent";
 import { Wrapper } from "@googlemaps/react-wrapper";
-
 
 type Message = {
   id: string,
@@ -26,7 +21,6 @@ type Chat = {
   createdBy: string,
   createdAt: FieldValue
 }
-const key = process.env.NEXT_PUBLIC_API_KEY as string;
 
 export default function Planner() {
     const auth = getAuth();
@@ -41,12 +35,6 @@ export default function Planner() {
     const [chatId, setChatId] = useState('');
     const [chatRoomId, setChatRoomId] = useState('');
     const [chatCount, setChatCount] = useState(0);
-    const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${latitude},${longitude}&days=3`;
-    const center = {
-      lat: latitude,
-      lng: longitude,
-    }
-    const zoom = 4;
 
     function toggleChatBox() {
       setShowChatBox(!showChatBox);
@@ -136,15 +124,7 @@ export default function Planner() {
     }
 
     async function getForecast() {
-        const response = fetch(forecastWeatherUrl, {
-            method: 'GET',
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        const data = await (await response).json();
-        console.log(data)
+        
     }
     function handleCreateChatClick() {
       createChat();
