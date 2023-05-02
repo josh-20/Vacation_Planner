@@ -102,7 +102,9 @@ export default function Home() {
                         <div key={planner.id}>
                             <div className="row">
                                 <div className={style.planName + " col-sm-6 text-center"}>{planner.name}</div>
-                                <button className={style.planButton + " col-sm-6 text-center"}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                <div className="col-sm-6 text-center">
+                                    <button className={style.planButton}  onClick={() =>{handleViewPlan(planner.id)}}>View</button>
+                                </div>
                                 <div className={"col-sm-12 " + style.underline}></div>
                             </div>
                         </div>
