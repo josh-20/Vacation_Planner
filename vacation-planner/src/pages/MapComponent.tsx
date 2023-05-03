@@ -7,15 +7,15 @@ import { query, collection, getDoc, addDoc, updateDoc, getDocs, where, doc, serv
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 
-export default function MapComponent() {
-  const router = useRouter();
-  const id = router.query!.id as string;
+export default function MapComponent({plannerId}: {plannerId: string}) {
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyCkj8pM8eahJEUCXj5Z85FeqiY739s3KJA" as string,
     libraries: ["places", "drawing", "geometry"],
   });
+
+  console.log(plannerId)
 
   type Place = {
     id: string,
@@ -28,8 +28,8 @@ export default function MapComponent() {
   useEffect(() => {
     async function loadPlaces() {
       setPlaces([]);
-      const placeRef = collection(db, 'planners/id/places')
-      const data = await getDocs(query(placeRef, where("plannerId", "==", id)))
+      const placeRef = collection(db, `planners/${plannerId}/places`)
+      const data = await getDocs(query(placeRef, where("plannerId", "==", plannerId)))
       const newPlaces: Place[] = [];
       console.log(data)
       data.forEach((doc) => {
@@ -38,6 +38,9 @@ export default function MapComponent() {
       setPlaces(newPlaces)
     };
     loadPlaces();
+    if(places.length > 0){
+      setCenter({lat: places[0].lat, lng: places[0].long})
+    }
   }, [])
 
   const geocoder = new google.maps.Geocoder();
@@ -127,7 +130,8 @@ export default function MapComponent() {
   }
 
   const savePlaces = async () => {
-    const placeRef = collection(db, 'planners/id/places')
+    console.log("Saving...")
+    const placeRef = collection(db, `planners/${plannerId}/places`)
     places.forEach(async (place) => {
       const docRef = await addDoc(placeRef, place);
       (place as Place).id = docRef.id

@@ -160,7 +160,7 @@ export default function Planner() {
         <div className="center row">
             <div className="center col">
                 <Wrapper apiKey="AIzaSyAcgKDA_KwT_x_syIKsQHuzERyu2BmEJPI">
-                  <MapComponent />
+                  <MapComponent plannerId={id}/>
                 </Wrapper>
             </div>
         </div>
