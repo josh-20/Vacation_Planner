@@ -31,8 +31,9 @@ export default function MapComponent() {
       const placeRef = collection(db, 'planners/id/places')
       const data = await getDocs(query(placeRef, where("plannerId", "==", id)))
       const newPlaces: Place[] = [];
+      console.log(data)
       data.forEach((doc) => {
-        newPlaces.push({...doc.data()} as Place);
+        newPlaces.push({...doc.data(), id: doc.id} as Place);
       });
       setPlaces(newPlaces)
     };
