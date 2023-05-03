@@ -7,9 +7,7 @@ import { query, collection, getDoc, addDoc, updateDoc, getDocs, where, doc, serv
 import {ref, onChildAdded, push, set} from "firebase/database";
 import { db,rtdb } from "../../firebaseConfig";
 
-export default function MapComponent() {
-  const router = useRouter();
-  const id = router.query!.id as string;
+export default function MapComponent({plannerId}: {plannerId: string}) {
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const { isLoaded, loadError } = useLoadScript({
@@ -17,17 +15,35 @@ export default function MapComponent() {
     libraries: ["places", "drawing", "geometry"],
   });
 
+  console.log(plannerId)
+
   type Place = {
     id: string,
     lat: number,
     long: number,
     address: string,
-    plannerId: string
+    plannerId: string,
   }
 
   useEffect(() => {
-    setPlaces([]);
-    //const plannerRef = ref(db, `/planners/${id}/places`)
+    async function loadPlaces() {
+      setPlaces([]);
+      const placeRef = collection(db, `planners/${plannerId}/places`)
+      const data = await getDocs(query(placeRef, where("plannerId", "==", plannerId)))
+      const newPlaces: Place[] = [];
+      data.forEach((doc) => {
+        newPlaces.push({...doc.data(), id: doc.id} as Place);
+      });
+      setPlaces([...newPlaces])
+      places.forEach(place => {
+        const marker = {lat: place.lat, lng: place.long}
+        setMarkers([...markers, marker])
+      });
+    };
+    loadPlaces();
+    if(places.length > 0){
+      setCenter({lat: places[0].lat, lng: places[0].long})
+    }
   }, [])
 
   const geocoder = new google.maps.Geocoder();
@@ -69,6 +85,7 @@ export default function MapComponent() {
         if(res.results[0]){
           place.address =  res.results[0].formatted_address;
           place.id = res.results[0].place_id;
+          place.plannerId = plannerId;
         }
       })
       console.log(place)
@@ -116,6 +133,15 @@ export default function MapComponent() {
     console.log(center)
   }
 
+  const savePlaces = async () => {
+    console.log("Saving...")
+    console.log(places)
+    const placeRef = collection(db, `planners/${plannerId}/places`)
+    places.forEach(async (place) => {
+      const docRef = await addDoc(placeRef, place);
+      (place as Place).id = docRef.id
+    });
+  }
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -149,7 +175,7 @@ export default function MapComponent() {
             </div>
           </div>
           <div className="col-sm-4 text-center">
-          <button className={style.planButton} id={style.planButton}>Save</button>
+          <button className={style.planButton} id={style.planButton} onClick={savePlaces}>Save</button>
           </div>
             <ul className="col-sm-4 text-left">
               {places.map((place, index) => (
