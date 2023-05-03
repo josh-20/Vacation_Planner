@@ -27,7 +27,7 @@ export default function MapComponent() {
 
   useEffect(() => {
     setPlaces([]);
-    const plannerRef = ref(db, `/planners/${id}/places`)
+    //const plannerRef = ref(db, `/planners/${id}/places`)
   }, [])
 
   const geocoder = new google.maps.Geocoder();
