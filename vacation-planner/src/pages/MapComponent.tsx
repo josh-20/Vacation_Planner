@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import style from "../styles/map.module.css";
+import { useParams } from "react-router-dom";
+import { useRouter } from "next/router";
+import { query, collection, getDoc, addDoc, updateDoc, getDocs, where, doc, serverTimestamp, FieldValue, getCountFromServer, AggregateField } from "firebase/firestore";
+import {ref, onChildAdded, push, set} from "firebase/database";
+import { db,rtdb } from "../../firebaseConfig";
 
 export default function MapComponent() {
+  const router = useRouter();
+  const id = router.query!.id as string;
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const { isLoaded, loadError } = useLoadScript({
@@ -14,8 +21,14 @@ export default function MapComponent() {
     id: string,
     lat: number,
     long: number,
-    address: string
+    address: string,
+    plannerId: string
   }
+
+  useEffect(() => {
+    setPlaces([]);
+    const plannerRef = ref(db, `/planners/${id}/places`)
+  }, [])
 
   const geocoder = new google.maps.Geocoder();
   const [center, setCenter] = useState({ lat: 41, lng: -111 });
@@ -85,8 +98,8 @@ export default function MapComponent() {
 
   const deletePlace = (place: Place) => {
     const marker = {lat: place.lat, lng: place.long}
-    const placeArr = places
-    const markerArr = markers
+    const placeArr = [...places]
+    const markerArr = [...markers]
     const pIdx = placeArr.indexOf(place);
     const mIdx = markerArr.indexOf(marker);
     placeArr.splice(pIdx, 1);
@@ -101,6 +114,10 @@ export default function MapComponent() {
       setCenter(center)
     }
     console.log(center)
+  }
+
+  const savePlaces = () => {
+    //Save stuff to firebase
   }
 
   if (loadError) return <div>Error loading maps</div>;
