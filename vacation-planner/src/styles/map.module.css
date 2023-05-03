@@ -8,3 +8,31 @@
     color: #56514b;
     
 }
+.planButton{
+    text-align: center;
+    background-color: #56514b;
+    max-width: 100px;
+    color: #f3f9f3;
+    border: #56514b 2px solid;
+    font-weight: 500;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.planButton:hover{
+    background-color: #f3f9f3;
+    color: #56514b;
+    box-shadow: #56514b 0px 2px 5px;
+    transform: translateY(-2px);
+    transition: .2s;
+}
+.placeData{
+    margin-left: 50px;
+    list-style-type: none;
+}
+#planButton{
+    margin-top: 10px;
+}
