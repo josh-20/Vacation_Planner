@@ -98,8 +98,8 @@ export default function MapComponent() {
 
   const deletePlace = (place: Place) => {
     const marker = {lat: place.lat, lng: place.long}
-    const placeArr = [...places]
-    const markerArr = [...markers]
+    const placeArr = [...places];
+    const markerArr = [...markers];
     const pIdx = placeArr.indexOf(place);
     const mIdx = markerArr.indexOf(marker);
     placeArr.splice(pIdx, 1);
@@ -116,9 +116,6 @@ export default function MapComponent() {
     console.log(center)
   }
 
-  const savePlaces = () => {
-    //Save stuff to firebase
-  }
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -135,7 +132,7 @@ export default function MapComponent() {
           ))}
         </GoogleMap>
         <div className="row">
-          <div className="col">
+          <div className="col-sm-4 text-left">
             <div className={style.forecastCtn}>
               <ul>
                 {forecast.map((item, index) => (
@@ -151,19 +148,21 @@ export default function MapComponent() {
               </ul>
             </div>
           </div>
-          <div className="col">
-            <ul>
+          <div className="col-sm-4 text-center">
+          <button className={style.planButton} id={style.planButton}>Save</button>
+          </div>
+            <ul className="col-sm-4 text-left">
               {places.map((place, index) => (
-                <li key={index}>
-                  <div>
+                <li className={style.placeData} key={index}>
+                  <div className={style.placeData}>
                     Address: {place.address}  
-                    <button onClick={() => deletePlace(place)}>Delete</button>
+                    <button className={style.planButton} onClick={() => deletePlace(place)}>Delete</button>
                   </div>
                 </li>
               )) }
             </ul>
-            <button>Save</button>
-          </div>
+            
+          
         </div>
       </div>
     </>
