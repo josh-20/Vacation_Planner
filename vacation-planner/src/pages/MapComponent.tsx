@@ -31,11 +31,14 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
       const placeRef = collection(db, `planners/${plannerId}/places`)
       const data = await getDocs(query(placeRef, where("plannerId", "==", plannerId)))
       const newPlaces: Place[] = [];
-      console.log(data)
       data.forEach((doc) => {
         newPlaces.push({...doc.data(), id: doc.id} as Place);
       });
-      setPlaces(newPlaces)
+      setPlaces([...newPlaces])
+      places.forEach(place => {
+        const marker = {lat: place.lat, lng: place.long}
+        setMarkers([...markers, marker])
+      });
     };
     loadPlaces();
     if(places.length > 0){
@@ -82,6 +85,7 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
         if(res.results[0]){
           place.address =  res.results[0].formatted_address;
           place.id = res.results[0].place_id;
+          place.plannerId = plannerId;
         }
       })
       console.log(place)
@@ -131,6 +135,7 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
 
   const savePlaces = async () => {
     console.log("Saving...")
+    console.log(places)
     const placeRef = collection(db, `planners/${plannerId}/places`)
     places.forEach(async (place) => {
       const docRef = await addDoc(placeRef, place);
