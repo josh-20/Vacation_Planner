@@ -11,6 +11,7 @@ export default function MapComponent() {
   });
 
   type Place = {
+    id: string,
     lat: number,
     long: number,
     address: string
@@ -54,7 +55,7 @@ export default function MapComponent() {
       .then((res) => {
         if(res.results[0]){
           place.address =  res.results[0].formatted_address;
-          
+          place.id = res.results[0].place_id;
         }
       })
       console.log(place)
@@ -88,10 +89,18 @@ export default function MapComponent() {
     const markerArr = markers
     const pIdx = placeArr.indexOf(place);
     const mIdx = markerArr.indexOf(marker);
-    const newPlaceArr = placeArr.splice(pIdx, 1);
-    const newMarkerArr = markerArr.splice(mIdx, 1);
-    setMarkers(newMarkerArr);
-    setPlaces(newPlaceArr)
+    placeArr.splice(pIdx, 1);
+    markerArr.splice(mIdx, 1);
+    setMarkers(markerArr);
+    setPlaces(placeArr);
+    console.log(markers)
+    if(markers.length != 0){
+      setCenter(markers[0])
+    }
+    else{
+      setCenter(center)
+    }
+    console.log(center)
   }
 
   if (loadError) return <div>Error loading maps</div>;
