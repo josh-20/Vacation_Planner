@@ -22,12 +22,21 @@ export default function MapComponent() {
     lat: number,
     long: number,
     address: string,
-    plannerId: string
+    plannerId: string,
   }
 
   useEffect(() => {
-    setPlaces([]);
-    //const plannerRef = ref(db, `/planners/${id}/places`)
+    async function loadPlaces() {
+      setPlaces([]);
+      const placeRef = collection(db, 'planners/id/places')
+      const data = await getDocs(query(placeRef, where("plannerId", "==", id)))
+      const newPlaces: Place[] = [];
+      data.forEach((doc) => {
+        newPlaces.push({...doc.data()} as Place);
+      });
+      setPlaces(newPlaces)
+    };
+    loadPlaces();
   }, [])
 
   const geocoder = new google.maps.Geocoder();
@@ -116,6 +125,13 @@ export default function MapComponent() {
     console.log(center)
   }
 
+  const savePlaces = async () => {
+    const placeRef = collection(db, 'planners/id/places')
+    places.forEach(async (place) => {
+      const docRef = await addDoc(placeRef, place);
+      (place as Place).id = docRef.id
+    });
+  }
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
@@ -149,7 +165,7 @@ export default function MapComponent() {
             </div>
           </div>
           <div className="col-sm-4 text-center">
-          <button className={style.planButton} id={style.planButton}>Save</button>
+          <button className={style.planButton} id={style.planButton} onClick={savePlaces}>Save</button>
           </div>
             <ul className="col-sm-4 text-left">
               {places.map((place, index) => (
