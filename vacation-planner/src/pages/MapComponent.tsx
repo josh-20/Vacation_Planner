@@ -4,11 +4,19 @@ import style from "../styles/map.module.css";
 
 export default function MapComponent() {
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
+  const [places, setPlaces] = useState<Place[]>([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyCkj8pM8eahJEUCXj5Z85FeqiY739s3KJA" as string,
     libraries: ["places", "drawing", "geometry"],
   });
 
+  type Place = {
+    lat: number,
+    long: number,
+    address: string
+  }
+
+  const geocoder = new google.maps.Geocoder();
   const [center, setCenter] = useState({ lat: 41, lng: -111 });
   const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
   useEffect(() => {
@@ -35,10 +43,36 @@ export default function MapComponent() {
         console.log(error);
       }
     };
+    const fetchLocationInfo = async (lat: number, lng: number) => {
+      const latlng = {lat, lng}
+      const place = {
+        lat: lat,
+        long: lng,
+        address: ""
+      } as Place;
+      await geocoder.geocode({location: latlng})
+      .then((res) => {
+        if(res.results[0]){
+          place.address =  res.results[0].formatted_address;
+          
+        }
+      })
+      console.log(place)
+      console.log(places.indexOf(place))
+      if(place.address != "" && places.indexOf(place) == -1){
+        setPlaces([...places, place])
+      }
+      else{
+        console.log("Unable to find address")
+      }
+    }
     markers.forEach(marker => {
       fetchWeatherData(marker.lat, marker.lng);
+      fetchLocationInfo(marker.lat, marker.lng);
+      console.log(places)
     });
   }, [isLoaded, markers]);
+
   const handleMapClick = (event: google.maps.MapMouseEvent) => {
     const newMarker = {
       lat: event.latLng!.lat(),
@@ -47,6 +81,19 @@ export default function MapComponent() {
       setMarkers(current => [...current, newMarker]);
       setCenter(newMarker);
   };
+
+  const deletePlace = (place: Place) => {
+    const marker = {lat: place.lat, lng: place.long}
+    const placeArr = places
+    const markerArr = markers
+    const pIdx = placeArr.indexOf(place);
+    const mIdx = markerArr.indexOf(marker);
+    const newPlaceArr = placeArr.splice(pIdx, 1);
+    const newMarkerArr = markerArr.splice(mIdx, 1);
+    setMarkers(newMarkerArr);
+    setPlaces(newPlaceArr)
+  }
+
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
   return (
@@ -61,19 +108,36 @@ export default function MapComponent() {
             <Marker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
           ))}
         </GoogleMap>
-        <div className={style.forecastCtn}>
-          <ul>
-            {forecast.map((item, index) => (
-              <li className={style.forecastData} key={index}>
-                <p>Date: {item.date}</p>
-                <p>Location: {item.city + ", " + item.country}</p>
-                <p>Average temperature: {item.avgTemp}F</p>
-                <p>High: {item.high}F</p>
-                <p>Low: {item.low}F</p>
-                <p>Rain chance: {item.rainChance}%</p>
-              </li>
-            ))}
-          </ul>
+        <div className="row">
+          <div className="col">
+            <div className={style.forecastCtn}>
+              <ul>
+                {forecast.map((item, index) => (
+                  <li className={style.forecastData} key={index}>
+                    <p>Date: {item.date}</p>
+                    <p>Location: {item.city + ", " + item.country}</p>
+                    <p>Average temperature: {item.avgTemp}F</p>
+                    <p>High: {item.high}F</p>
+                    <p>Low: {item.low}F</p>
+                    <p>Rain chance: {item.rainChance}%</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="col">
+            <ul>
+              {places.map((place, index) => (
+                <li key={index}>
+                  <div>
+                    Address: {place.address}  
+                    <button onClick={() => deletePlace(place)}>Delete</button>
+                  </div>
+                </li>
+              )) }
+            </ul>
+            <button>Save</button>
+          </div>
         </div>
       </div>
     </>
