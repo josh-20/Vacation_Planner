@@ -10,7 +10,6 @@ import { db,rtdb } from "../../firebaseConfig";
 export default function MapComponent({plannerId}: {plannerId: string}) {
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
-  const geocoder = new google.maps.Geocoder();
   const [center, setCenter] = useState({ lat: 41, lng: -111 });
   const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
   const { isLoaded, loadError } = useLoadScript({
@@ -54,6 +53,7 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
   })
   useEffect(() => {
     if (!isLoaded) return;
+    const geocoder = new google.maps.Geocoder();
     
     const key = "edab3a16d1fc4f7fa2e32357232904";
     const fetchWeatherData = async (lat: number, lng: number) => {
