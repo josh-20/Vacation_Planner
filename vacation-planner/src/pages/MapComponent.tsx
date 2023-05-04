@@ -10,6 +10,9 @@ import { db,rtdb } from "../../firebaseConfig";
 export default function MapComponent({plannerId}: {plannerId: string}) {
   const [forecast, setForecast] = useState<{ date: string; avgTemp: number; high: number; low: number; rainChance: number; city: string; country: string }[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
+  const geocoder = new google.maps.Geocoder();
+  const [center, setCenter] = useState({ lat: 41, lng: -111 });
+  const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyCkj8pM8eahJEUCXj5Z85FeqiY739s3KJA" as string,
     libraries: ["places", "drawing", "geometry"],
@@ -46,9 +49,9 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
       setCenter({lat: places[0].lat, lng: places[0].long})
     }
   }, [])
-  const geocoder = new google.maps.Geocoder();
-  const [center, setCenter] = useState({ lat: 41, lng: -111 });
-  const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
+  useEffect(() => {
+    if(!isLoaded) return;
+  })
   useEffect(() => {
     if (!isLoaded) return;
     
