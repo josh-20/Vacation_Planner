@@ -14,6 +14,7 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
     googleMapsApiKey: "AIzaSyCkj8pM8eahJEUCXj5Z85FeqiY739s3KJA" as string,
     libraries: ["places", "drawing", "geometry"],
   });
+ 
 
   console.log(plannerId)
 
@@ -45,7 +46,6 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
       setCenter({lat: places[0].lat, lng: places[0].long})
     }
   }, [])
-
   const geocoder = new google.maps.Geocoder();
   const [center, setCenter] = useState({ lat: 41, lng: -111 });
   const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
@@ -54,7 +54,7 @@ export default function MapComponent({plannerId}: {plannerId: string}) {
     
     const key = "edab3a16d1fc4f7fa2e32357232904";
     const fetchWeatherData = async (lat: number, lng: number) => {
-      const forecastWeatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${lat},${lng}&days=3`;
+      const forecastWeatherUrl = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${lat},${lng}&days=3`;
       try {
         const response = await fetch(forecastWeatherUrl);
         const data = await response.json();
